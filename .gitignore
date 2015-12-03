@@ -5,3 +5,4 @@ node_modules
 /dist
 /www
 /lib
+npm-debug.log

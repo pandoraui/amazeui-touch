@@ -30,49 +30,23 @@ const banner = `/** ${pkg.title} v${pkg.version} | by Amaze UI Team
   `;
 
 const paths = {
-  style: [
-    'src/scss/amazeui.touch.scss'
-  ],
+  scss: 'src/scss/amazeui.touch.scss',
   scssModules: 'src/scss/**/*.scss',
   fonts: 'src/fonts/*',
   jsEntry: 'src/js/index.js',
   dist: 'dist',
 };
 
-// const docsDir = 'docs/_app';
-// const appPaths = {
-//   js: `${docsDir}/js/app.js`,
-//   styleDir: `${docsDir}/style`,
-//   style: `${docsDir}/style/app.scss`,
-//   dist: 'www',
-//
-//   ksEntry: 'kitchen-sink/app.js',
-//   ksIndex: 'kitchen-sink/index.html',
-//   ksDist: 'www/kitchen-sink',
-//
-//   appEntry: 'app/js/app.js',
-//   appIndex: 'app/index.html',
-//   appDist: 'www/app'
-// };
-
-var appDir = 'docs/_app';
-var appPaths;
-var resetPaths = function(dir){
-  appDir = dir || 'docs/_app';
-  appPaths = {
-    js: `${appDir}/js/app.js`,
-    styleDir: `${appDir}/style`,
-    style: [`${paths.style}`, `${appDir}/style/app.scss`],
-    dist: 'www',
-
-    appEntry: `${appDir}/js/app.js`,
-    appIndex: `${appDir}/index.html`,
-    appDist: `www/${appDir}`
-  }
-  return appPaths;
-}
-resetPaths();
-
+const docsDir = 'docs/_app';
+const docsPaths = {
+  js: `${docsDir}/js/app.js`,
+  styleDir: `${docsDir}/style`,
+  style: `${docsDir}/style/app.scss`,
+  dist: 'www',
+  ksEntry: 'kitchen-sink/app.js',
+  ksIndex: 'kitchen-sink/index.html',
+  ksDist: 'www/kitchen-sink'
+};
 
 /*
 // move to package.json
@@ -101,10 +75,6 @@ gulp.task('clean', () => {
   return del(['dist', 'www', 'lib']);
 });
 
-gulp.task('clean:app', () => {
-  return del([appPaths.appDist]);
-});
-
 /**
  * Build Amaze UI Touch
  */
@@ -114,27 +84,25 @@ gulp.task('build:clean', () => {
 });
 
 gulp.task('style:scss', () => {
-  var options = appDir === 'docs/_app' ? paths : appPaths;
-  //if(!options.style) return;
-  return gulp.src(options.style)
+  return gulp.src(paths.scss)
     .pipe($.sass({
       outputStyle: 'expanded'
     }).on('error', $.sass.logError))
     .pipe($.autoprefixer(autoprefixerOptions))
     .pipe(addBanner())
-    .pipe(gulp.dest(options.dist))
-    .pipe($.if(!isProduction, gulp.dest(appPaths.appDist)))
+    .pipe(gulp.dest(paths.dist))
+    .pipe($.if(!isProduction, gulp.dest(docsPaths.ksDist)))
     .pipe($.csso())
     .pipe(addBanner())
     .pipe($.rename({suffix: '.min'}))
-    .pipe(gulp.dest(options.dist))
-    .pipe($.if(isProduction, gulp.dest(appPaths.appDist)));
+    .pipe(gulp.dest(paths.dist))
+    .pipe($.if(isProduction, gulp.dest(docsPaths.ksDist)));
 });
 
 gulp.task('style:fonts', () => {
   return gulp.src(paths.fonts)
     .pipe(gulp.dest(paths.dist + '/fonts'))
-    .pipe(gulp.dest(appPaths.appDist + '/fonts'));
+    .pipe(gulp.dest(docsPaths.ksDist + '/fonts'));
 });
 
 gulp.task('style:watch', () => {
@@ -175,20 +143,12 @@ gulp.task('build', (callback) => {
   );
 });
 
-gulp.task('html:replace', () => {
-  const rFrom = '__ENV__';
-  const rTo = isProduction ? '.min' : '';
-  const replaceEnv = function(options) {
-    return gulp.src(options.src)
-      .pipe($.replace(rFrom, rTo))
-      .pipe(gulp.dest(options.dist));
-  };
-  let app = replaceEnv({
-    src: appPaths.appIndex,
-    dist: appPaths.appDist,
-  });
+/**
+ * Build Amaze UI Touch Website
+ */
 
-  return merge(app);
+gulp.task('docs:clean', () => {
+  return del(docsPaths.dist);
 });
 
 let bsf = (options) => {
@@ -237,69 +197,109 @@ let bundler = (options) => {
     }));
 };
 
-
-// kitchen-sink
-// APP
-gulp.task('app:build', () => {
-  var appBundle = bsf({
-    // vendors: [
-    //   "react",
-    //   "react-dom",
-    //   "react-addons-css-transition-group",
-    //   "react-router"
-    // ],
-    entries: [appPaths.appEntry],
-    // output: {
-    //   path: 'www/app/js'
-    // }
+gulp.task('docs:js', () => {
+  const docBundle = bsf({
+    entries: [docsPaths.js],
+    transform: [[markedify, {marked: getMarked()}], 'brfs']
   });
-  var appOptions = {
-    title: 'App',
-    b: appBundle,
-    dist: appPaths.appDist + '/js',
+
+  const docsBundleOptions = {
+    title: 'Docs',
+    b: docBundle,
+    dist: docsPaths.dist,
   };
 
-  appBundle.on('update', bundler.bind(null, appOptions))
+  docBundle.on('update', bundler.bind(null, docsBundleOptions))
     .on('log', $.util.log);
 
-  return bundler(appOptions);
+  return bundler(docsBundleOptions);
 });
 
-gulp.task('app:server', () => {
+gulp.task('docs:style', () => {
+  let stream = gulp.src(docsPaths.style)
+    .pipe($.sass({
+      outputStyle: 'expanded'
+    }).on('error', $.sass.logError))
+    .pipe($.autoprefixer(autoprefixerOptions));
+
+  return !isProduction ? stream.pipe(gulp.dest(docsPaths.dist)) :
+    stream.pipe($.csso())
+      .pipe(buildBanner())
+      .pipe($.rename({suffix: '.min'}))
+      .pipe(gulp.dest(docsPaths.dist));
+});
+
+gulp.task('docs:replace', () => {
+  const rFrom = '__ENV__';
+  const rTo = isProduction ? '.min' : '';
+  const replaceEnv = function(options) {
+    return gulp.src(options.src)
+      .pipe($.replace(rFrom, rTo))
+      .pipe(gulp.dest(options.dist));
+  };
+  let docs = replaceEnv({
+    src: `${docsDir}/index.html`,
+    dist: docsPaths.dist,
+  });
+  let ks = replaceEnv({
+    src: docsPaths.ksIndex,
+    dist: docsPaths.ksDist,
+  });
+
+  return merge(docs, ks);
+});
+
+gulp.task('docs:server', () => {
   let bs = BS.create();
   bs.init({
-    server: [appPaths.appDist],
+    server: ['www'],
     open: 'external',
   });
 
-  gulp.watch(`${appPaths.dist}/**/*`, bs.reload);
-  gulp.watch(`${appPaths.styleDir}/*`, ['docs:style']);
+  gulp.watch(`${docsPaths.dist}/**/*`, bs.reload);
+  gulp.watch(`${docsPaths.styleDir}/*`, ['docs:style']);
 });
 
-// gulp.task('docs', (callback) => {
-//   runSequence('docs:clean',
-//     ['styleDev', 'docs:style', 'docs:js', 'docs:replace', 'ks:build'],
-//     'docs:server',
-//     callback);
-// });
+// kitchen-sink
+gulp.task('ks:build', () => {
+  const ksBundle = bsf({
+    entries: [docsPaths.ksEntry],
+  });
+  const ksOptions = {
+    title: 'kitchen-sink',
+    b: ksBundle,
+    dist: docsPaths.ksDist,
+  };
 
-// gulp.task('default', ['docs']);
+  ksBundle.on('update', bundler.bind(null, ksOptions))
+    .on('log', $.util.log);
 
-gulp.task('ks', (callback) => {
-  resetPaths('kitchen-sink');
-  runSequence(
-    'clean:app',
-    ['styleDev', 'html:replace', 'app:build'],
-    'app:server',
+  return bundler(ksOptions);
+});
+
+gulp.task('ks:server', () => {
+  let bs = BS.create();
+  bs.init({
+    server: ['www/kitchen-sink'],
+    open: 'external',
+  });
+
+  gulp.watch(`${docsPaths.dist}/**/*`, bs.reload);
+  gulp.watch(`${docsPaths.styleDir}/*`, ['docs:style']);
+});
+
+gulp.task('docs', (callback) => {
+  runSequence('docs:clean',
+    ['styleDev', 'docs:style', 'docs:js', 'docs:replace', 'ks:build'],
+    'docs:server',
     callback);
 });
 
-gulp.task('app', (callback) => {
-  resetPaths('app');
+gulp.task('default', ['docs']);
 
+gulp.task('ks', (callback) => {
   runSequence(
-    // 'clean:app',
-    ['styleDev', 'html:replace', 'app:build'],
-    'app:server',
+    ['ks:build'],
+    'ks:server',
     callback);
 });

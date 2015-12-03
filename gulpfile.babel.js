@@ -63,7 +63,7 @@ var resetPaths = function(dir){
     js: `${appDir}/js/app.js`,
     styleDir: `${appDir}/style`,
     style: [`${paths.style}`, `${appDir}/style/app.scss`],
-    dist: 'www',
+    dist: dir ? `www/${appDir}` : 'www',
 
     appEntry: `${appDir}/js/app.js`,
     appIndex: `${appDir}/index.html`,
@@ -122,19 +122,19 @@ gulp.task('style:scss', () => {
     }).on('error', $.sass.logError))
     .pipe($.autoprefixer(autoprefixerOptions))
     .pipe(addBanner())
-    .pipe(gulp.dest(options.dist))
-    .pipe($.if(!isProduction, gulp.dest(appPaths.appDist)))
+    .pipe(gulp.dest(options.dist + '/css'))
+    .pipe($.if(!isProduction, gulp.dest(appPaths.appDist + '/css')))
     .pipe($.csso())
     .pipe(addBanner())
     .pipe($.rename({suffix: '.min'}))
-    .pipe(gulp.dest(options.dist))
-    .pipe($.if(isProduction, gulp.dest(appPaths.appDist)));
+    .pipe(gulp.dest(options.dist + '/css'))
+    .pipe($.if(isProduction, gulp.dest(appPaths.appDist + '/css')));
 });
 
 gulp.task('style:fonts', () => {
   return gulp.src(paths.fonts)
-    .pipe(gulp.dest(paths.dist + '/fonts'))
-    .pipe(gulp.dest(appPaths.appDist + '/fonts'));
+    .pipe(gulp.dest(paths.dist + '/css/fonts'))
+    .pipe(gulp.dest(appPaths.appDist + '/css/fonts'));
 });
 
 gulp.task('style:watch', () => {
@@ -298,8 +298,8 @@ gulp.task('app', (callback) => {
   resetPaths('app');
 
   runSequence(
-    // 'clean:app',
-    ['styleDev', 'html:replace', 'app:build'],
+    'clean:app',
+    ['styleDev', 'style', 'html:replace', 'app:build'],
     'app:server',
     callback);
 });

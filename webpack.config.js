@@ -1,4 +1,6 @@
 export default {
+  // devtool: 'inline-source-map',
+  // debug: true,
   output: {
     library: 'AMUITouch',
     libraryTarget: 'umd'

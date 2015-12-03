@@ -126,5 +126,6 @@ const routes = (
 );
 
 document.addEventListener('DOMContentLoaded', function() {
+  console.debug('DOMContentLoaded');
   ReactDOM.render(routes, document.getElementById('sk-root'));
 });

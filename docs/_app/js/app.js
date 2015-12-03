@@ -121,5 +121,6 @@ const routes = (
 
 // Initial App
 document.addEventListener('DOMContentLoaded', function() {
+  console.debug('DOMContentLoaded');
   ReactDOM.render(routes, document.getElementById('root'));
 });

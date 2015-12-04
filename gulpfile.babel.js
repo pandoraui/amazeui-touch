@@ -60,6 +60,7 @@ var appPaths;
 var resetPaths = function(dir){
   appDir = dir || 'docs/_app';
   appPaths = {
+    imgs: `${appDir}/i/*`,
     js: `${appDir}/js/app.js`,
     styleDir: `${appDir}/style`,
     style: [`${paths.style}`, `${appDir}/style/app.scss`],
@@ -71,7 +72,7 @@ var resetPaths = function(dir){
   }
   return appPaths;
 }
-resetPaths();
+resetPaths('_app');
 
 
 /*
@@ -133,16 +134,22 @@ gulp.task('style:scss', () => {
 
 gulp.task('style:fonts', () => {
   return gulp.src(paths.fonts)
-    .pipe(gulp.dest(paths.dist + '/css/fonts'))
+    // .pipe(gulp.dest(paths.dist + '/css/fonts'))
     .pipe(gulp.dest(appPaths.appDist + '/css/fonts'));
+});
+
+gulp.task('copy:imgs', () => {
+  return gulp.src(appPaths.imgs)
+    // .pipe(gulp.dest(paths.dist + '/i'))
+    .pipe(gulp.dest(appPaths.appDist + '/i'));
 });
 
 gulp.task('style:watch', () => {
   gulp.watch(paths.scssModules, ['style:scss']);
 });
 
-gulp.task('style', ['style:scss', 'style:fonts']);
-gulp.task('styleDev', ['style:scss', 'style:fonts', 'style:watch']);
+gulp.task('style', ['style:scss', 'style:fonts', 'copy:imgs']);
+gulp.task('styleDev', ['style:scss', 'style:fonts', 'copy:imgs', 'style:watch']);
 
 // transform ES6 & JSX
 gulp.task('build:babel', () => {
@@ -204,7 +211,7 @@ let bsf = (options) => {
     transform: transform,
     // path map for fake `amazeui-touch` in `./kitchen-sink/`
     // @see https://github.com/vigetlabs/gulp-starter/issues/17
-    paths: ['./kitchen-sink/'],
+    paths: ['./'+ appDir +'/'],
   }));
 };
 
@@ -287,6 +294,7 @@ gulp.task('app:server', () => {
 
 gulp.task('ks', (callback) => {
   resetPaths('kitchen-sink');
+
   runSequence(
     'clean:app',
     ['styleDev', 'html:replace', 'app:build'],
@@ -300,6 +308,16 @@ gulp.task('app', (callback) => {
   runSequence(
     'clean:app',
     ['styleDev', 'style', 'html:replace', 'app:build'],
+    'app:server',
+    callback);
+});
+
+gulp.task('dev', (callback) => {
+  resetPaths('_app');
+
+  runSequence(
+    'clean:app',
+    ['styleDev', 'html:replace', 'app:build'],
     'app:server',
     callback);
 });

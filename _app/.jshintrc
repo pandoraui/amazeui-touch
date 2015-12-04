@@ -1,0 +1,28 @@
+{
+  "asi": false,  //是否可以缺失行尾分号
+  "sub":true,
+  "freeze": true,
+  "indent": 2,
+  "laxbreak":true,
+  "laxcomma":true,
+  "regexp":true,
+  "browser": true,
+  "loopfunc":true,
+  "expr":true,
+  "node": true,
+  "es5": true,
+  "esnext": true,
+  "bitwise": true,
+  "curly": true,
+  "immed": true,
+  "latedef": false,
+  "expr": true,
+  "eqeqeq": false,
+  "eqnull": false,
+  "newcap": true,
+  "noarg": true,
+  "undef": true,
+  "proto": true,
+  "strict": false,
+  "smarttabs": true
+}

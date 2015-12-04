@@ -1,9 +1,15 @@
 
-
+// var webpack = require('webpack')
 // var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('vendors.js');
 
 export default {
+  // plugins: [
+  //   new webpack.optimize.OccurenceOrderPlugin(),
+  //   new webpack.HotModuleReplacementPlugin(),
+  //   new webpack.NoErrorsPlugin()
+  // ],
   // devtool: 'inline-source-map',
+  // devtool: 'cheap-module-eval-source-map',
   // debug: true,
   output: {
     library: 'AMUITouch',

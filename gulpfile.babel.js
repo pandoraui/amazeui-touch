@@ -235,6 +235,11 @@ gulp.task('docs:replace', () => {
   const replaceEnv = function(options) {
     return gulp.src(options.src)
       .pipe($.replace(rFrom, rTo))
+      // replace stat code on dev
+      .pipe($.replace(/<!--STAT_CODE_START-->(.+)<!--STAT_CODE_END-->/g,
+        (match, $1) => {
+        return isProduction ? $1 : '';
+      }))
       .pipe(gulp.dest(options.dist));
   };
   let docs = replaceEnv({

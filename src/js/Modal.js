@@ -101,7 +101,7 @@ const Modal = React.createClass({
   },
 
   open() {
-    if (this.isClosed) {
+    if (this.isClosed()) {
       this.setState({
         isClosing: false,
         closed: false

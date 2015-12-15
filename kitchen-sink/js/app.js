@@ -102,9 +102,7 @@ const Detail = React.createClass({
     };
 
     return (
-      <View
-        id="sk-detail"
-      >
+      <View id="sk-detail">
         <NavBar
           title={component}
           leftNav={[backNav]}

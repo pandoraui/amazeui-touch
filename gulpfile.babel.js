@@ -282,6 +282,46 @@ gulp.task('app:build', () => {
     .on('log', $.util.log);
 
   return bundler(appOptions);
+  //return bundler(docsBundleOptions);
+});
+
+gulp.task('docs:style', () => {
+  let stream = gulp.src(docsPaths.style)
+    .pipe($.sass({
+      outputStyle: 'expanded'
+    }).on('error', $.sass.logError))
+    .pipe($.autoprefixer(autoprefixerOptions));
+
+  return !isProduction ? stream.pipe(gulp.dest(docsPaths.dist)) :
+    stream.pipe($.csso())
+      .pipe(buildBanner())
+      .pipe($.rename({suffix: '.min'}))
+      .pipe(gulp.dest(docsPaths.dist));
+});
+
+gulp.task('docs:replace', () => {
+  const rFrom = '__ENV__';
+  const rTo = isProduction ? '.min' : '';
+  const replaceEnv = function(options) {
+    return gulp.src(options.src)
+      .pipe($.replace(rFrom, rTo))
+      // replace stat code on dev
+      .pipe($.replace(/<!--STAT_CODE_START-->(.+)<!--STAT_CODE_END-->/g,
+        (match, $1) => {
+        return isProduction ? $1 : '';
+      }))
+      .pipe(gulp.dest(options.dist));
+  };
+  let docs = replaceEnv({
+    src: `${docsDir}/index.html`,
+    dist: docsPaths.dist,
+  });
+  let ks = replaceEnv({
+    src: docsPaths.ksIndex,
+    dist: docsPaths.ksDist,
+  });
+
+  return merge(docs, ks);
 });
 
 gulp.task('app:server', () => {

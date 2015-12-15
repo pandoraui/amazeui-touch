@@ -7,13 +7,13 @@ class Counter extends Component {
       <p>
         Clicked: {counter} times
         {' '}
-        <button className="btn" onClick={increment}>+</button>
+        <button className="btn btn-success btn-radius" onClick={increment}>+</button>
         {' '}
-        <button className="btn" onClick={decrement}>-</button>
+        <button className="btn btn-warning btn-radius" onClick={decrement}>-</button>
         {' '}
-        <button className="btn" onClick={incrementIfOdd}>Increment if odd</button>
+        <button className="btn btn-primary btn-radius" onClick={incrementIfOdd}>Increment if odd</button>
         {' '}
-        <button className="btn" onClick={() => incrementAsync()}>Increment async</button>
+        <button className="btn btn-secondary btn-radius" onClick={() => incrementAsync()}>Increment async</button>
       </p>
     );
   }

@@ -54,7 +54,6 @@ const paths = {
 //   appIndex: 'app/index.html',
 //   appDist: 'www/app'
 // };
-
 var appDir = 'docs/_app';
 var appPaths;
 var resetPaths = function(dir){
@@ -72,7 +71,7 @@ var resetPaths = function(dir){
   }
   return appPaths;
 }
-resetPaths('_app');
+resetPaths();
 
 
 /*
@@ -115,6 +114,7 @@ gulp.task('clean', () => {
 });
 
 gulp.task('clean:app', () => {
+  console.log('Dir: ' + appDir);
   return del([appPaths.appDist]);
 });
 
@@ -256,6 +256,23 @@ let bundler = (options) => {
     }));
 };
 
+// gulp.task('docs:js', () => {
+//   const docBundle = bsf({
+//     entries: [appPaths.js],
+//     transform: [[markedify, {marked: getMarked()}], 'brfs']
+//   });
+//
+//   const docsBundleOptions = {
+//     title: 'Docs',
+//     b: docBundle,
+//     dist: appPaths.dist,
+//   };
+//
+//   docBundle.on('update', bundler.bind(null, docsBundleOptions))
+//     .on('log', $.util.log);
+//
+//   return bundler(docsBundleOptions);
+// });
 
 // kitchen-sink
 // APP
@@ -286,17 +303,17 @@ gulp.task('app:build', () => {
 });
 
 gulp.task('docs:style', () => {
-  let stream = gulp.src(docsPaths.style)
+  let stream = gulp.src(appPaths.style)
     .pipe($.sass({
       outputStyle: 'expanded'
     }).on('error', $.sass.logError))
     .pipe($.autoprefixer(autoprefixerOptions));
 
-  return !isProduction ? stream.pipe(gulp.dest(docsPaths.dist)) :
+  return !isProduction ? stream.pipe(gulp.dest(appPaths.dist)) :
     stream.pipe($.csso())
       .pipe(buildBanner())
       .pipe($.rename({suffix: '.min'}))
-      .pipe(gulp.dest(docsPaths.dist));
+      .pipe(gulp.dest(appPaths.dist));
 });
 
 gulp.task('docs:replace', () => {
@@ -314,11 +331,11 @@ gulp.task('docs:replace', () => {
   };
   let docs = replaceEnv({
     src: `${docsDir}/index.html`,
-    dist: docsPaths.dist,
+    dist: appPaths.dist,
   });
   let ks = replaceEnv({
-    src: docsPaths.ksIndex,
-    dist: docsPaths.ksDist,
+    src: appPaths.appIndex,
+    dist: appPaths.appDist,
   });
 
   return merge(docs, ks);
@@ -335,14 +352,20 @@ gulp.task('app:server', () => {
   gulp.watch(`${appPaths.styleDir}/*`, ['docs:style']);
 });
 
-// gulp.task('docs', (callback) => {
-//   runSequence('docs:clean',
-//     ['styleDev', 'docs:style', 'docs:js', 'docs:replace', 'ks:build'],
-//     'docs:server',
-//     callback);
-// });
+gulp.task('docs', (callback) => {
+  // resetPaths('docs/_app');
+  // runSequence('clean',
+  //   ['styleDev', 'docs:style', 'docs:js', 'docs:replace', 'app:build'],
+  //   'docs:server',
+  //   callback);
+  runSequence(
+      'clean:app',
+      ['styleDev', 'html:replace', 'app:build'],
+      'app:server',
+      callback);
+});
 
-// gulp.task('default', ['docs']);
+gulp.task('default', ['ks']);
 
 gulp.task('ks', (callback) => {
   resetPaths('kitchen-sink');

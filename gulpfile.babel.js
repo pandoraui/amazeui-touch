@@ -83,7 +83,19 @@ const babelOptions = {
 };*/
 
 const autoprefixerOptions = {
-  browsers: ['> 1%', 'last 2 versions', 'ie 10']
+  //FIXME Autoprefixer会分析CSS代码，并且根据Can I Use所提供的资料来决定要加上哪些浏览器前缀
+  //browsers: ['> 1%', 'last 2 versions', 'ie 10']
+  browsers : [
+    'ie >= 9',
+    'ie_mob >= 10',
+    'ff >= 30',
+    'chrome >= 34',
+    'safari >= 7',
+    'opera >= 23',
+    'ios >= 7',
+    'android >= 2.3',
+    'bb >= 10'
+  ]
 };
 
 const replaceVersion = function() {

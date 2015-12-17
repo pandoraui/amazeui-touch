@@ -4,11 +4,14 @@
  * @author Minwe <minwe@yunshipei.com>
  */
 
+import path from 'path';
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import del from 'del';
 import runSequence from 'run-sequence';
 import webpack from 'webpack-stream';
+import named from 'vinyl-named';
+import assign from 'object-assign';
 import webpackConfig from './webpack.config';
 import browserify from 'browserify';
 import watchify from 'watchify';
@@ -35,6 +38,7 @@ const paths = {
   ],
   scssModules: 'src/scss/**/*.scss',
   fonts: 'src/fonts/*',
+  // jsEntry: ['src/js/index.js'],
   jsEntry: 'src/js/index.js',
   dist: 'dist',
 };
@@ -65,7 +69,7 @@ var resetPaths = function(dir){
     style: [`${paths.style}`, `${appDir}/style/app.scss`],
     dist: dir ? `www/${appDir}` : 'www',
 
-    appEntry: `${appDir}/js/app.js`,
+    appEntry: [`${appDir}/js/app.js`],
     appIndex: `${appDir}/index.html`,
     appDist: `www/${appDir}`
   }
@@ -175,10 +179,29 @@ gulp.task('build:babel', () => {
 // 所以使用 webpack 打包。考虑将 browserify 的工作都转移到 webpack 以减少 npm 依赖数量。
 gulp.task('build:pack', () => {
   return gulp.src(paths.jsEntry)
-    .pipe(webpack(webpackConfig))
+    // .pipe(named())
+    .pipe(webpack(assign({},webpackConfig,{
+      entry: {
+        //分开打包，需要指定文件分组，并且配置resolve解释依赖文件的位置
+        'index': paths.jsEntry,
+        'vendor': ['react', 'react-dom', 'redux', 'react-redux', 'redux-thunk', 'classnames'],
+      },
+      output: {
+        // library: 'AMUITouch',
+        libraryTarget: 'umd',
+        //path: path.join(__dirname, 'public/js/dest'),
+        filename: '[name].bundle.js'
+      },
+      resolve: {
+        extensions: ["", ".js", ".jsx", '.es6'],
+        // 这里 root 指谁的跟，项目根目录？可以配置 path.join(__dirname, '/src/js') 吗
+        root: path.join(__dirname, '/'),
+        modulesDirectories: ["node_modules"]
+      }
+    })))
     .pipe(replaceVersion())
     .pipe(addBanner())
-    .pipe($.rename('amazeui.touch.js'))
+    // .pipe($.rename('amazeui.touch.js'))
     .pipe(gulp.dest(paths.dist))
     .pipe($.uglify())
     .pipe(addBanner())

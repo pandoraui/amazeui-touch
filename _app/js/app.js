@@ -8,7 +8,6 @@ import configureStore from './store/configureStore';
 const store = configureStore();
 
 let rootElement = document.getElementById('root');
-console.log(rootElement);
 render(
   <Provider store={store}>
     <App />

@@ -26,15 +26,15 @@
   <!--顶部栏样式，默认值为default（白色），可以定为black（黑色）和black-translucent（灰色半透明）-->
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <!-- <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/> -->
-  <link rel="icon" type="image/png" href="i/favicon.png">
+  <!-- <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" /> -->
+  <link rel="icon" type="image/png" href="favicon.png" />
 
   <!-- Add to homescreen -->
   <!-- <link rel="manifest" href="manifest.json"> -->
 
   <!-- <link rel="stylesheet" href="css/amazeui.touch.min.css"/> -->
-  <link rel="stylesheet" href="css/amazeui.touch__ENV__.css">
-  <link rel="stylesheet" href="css/app__ENV__.css">
+  <!-- <link rel="stylesheet" href="css/amazeui.touch__ENV__.css">
+  <link rel="stylesheet" href="css/app__ENV__.css"> -->
 </head>
 <body>
   <div class="root" id="root"></div>
@@ -42,6 +42,7 @@
 <!-- JS 要放在后面引入，因为不是放在 ready 事件里执行的 -->
 <!-- <script src="venders/react.min.js"></script> -->
 <!-- <script src="js/app__ENV__.js"></script> -->
-<script src="js/index.bundle.js"></script>
+<script src="js/vendor.bundle.min.js"></script>
+<script src="js/index.bundle.min.js"></script>
 </body>
 </html>

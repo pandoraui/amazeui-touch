@@ -1,5 +1,5 @@
 // var path = require('path')
-// var webpack = require('webpack')
+var webpack = require('webpack')
 
 export default {
   // devtool: 'inline-source-map', //devtool: 'source-map'
@@ -58,6 +58,7 @@ export default {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel',
+
         // move to package.json
         query: {
           // stage: 0,
@@ -108,21 +109,21 @@ export default {
 
   // 新添加的module属性
   module: {
-      //加载器配置 "-loader"其实是可以省略不写的，多个loader之间用“!”连接起来。
-      loaders: [
-        //.css 文件使用 style-loader 和 css-loader 来处理
-        { test: /\.css$/, loader: 'style-loader!css-loader' },
+    //加载器配置 "-loader"其实是可以省略不写的，多个loader之间用“!”连接起来。
+    loaders: [
+      //.css 文件使用 style-loader 和 css-loader 来处理
+      { test: /\.css$/, loader: 'style-loader!css-loader' },
 
-        //.js 文件使用 jsx-loader 来编译处理
-        { test: /\.js$/, loader: 'jsx-loader?harmony' },  //loader: "babel"
+      //.js 文件使用 jsx-loader 来编译处理
+      { test: /\.js$/, loader: 'jsx-loader?harmony' },  //loader: "babel"
 
-        //.scss 文件使用 style-loader、css-loader 和 sass-loader 来编译处理
-        { test: /\.scss$/, loader: 'style!css!sass?sourceMap'},
+      //.scss 文件使用 style-loader、css-loader 和 sass-loader 来编译处理
+      { test: /\.scss$/, loader: 'style!css!sass?sourceMap'},
 
-        //图片文件使用 url-loader 来处理，小于8kb的直接转为base64
-        { test: /\.(png|jpg|svg)$/, loader: 'url-loader?limit=8192'}
-        //配置信息的参数“?limit=8192”表示将所有小于8kb的图片都转为base64形式（其实应该说超过8kb的才使用 url-loader 来映射到文件，否则转为data url形式）。
-      ]
+      //图片文件使用 url-loader 来处理，小于8kb的直接转为base64
+      { test: /\.(png|jpg|svg)$/, loader: 'url-loader?limit=8192'}
+      //配置信息的参数“?limit=8192”表示将所有小于8kb的图片都转为base64形式（其实应该说超过8kb的才使用 url-loader 来映射到文件，否则转为data url形式）。
+    ]
   },
 
   //其它解决方案配置

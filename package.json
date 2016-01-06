@@ -1,7 +1,7 @@
 {
-  "name": "amazeui-touch",
-  "title": "Amaze UI Touch",
-  "version": "0.1.0-beta2",
+  "name": "react-redux-start",
+  "title": "React redux start",
+  "version": "0.0.1",
   "description": "Web Components for Mobile UI based on React.js",
   "main": "lib/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "build": "env NODE_ENV=production gulp build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint": "./node_modules/.bin/eslint ./src/js/",
-    "changelog": "github-changes -o amazeui-touch -r amazeui-touch -a"
+    "changelog": ""
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
     "react-amazeui",
     "web-components"
   ],
-  "author": "AllMobilize Inc.",
+  "author": "Thinker Inc.",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/amazeui/amazeui-touch/issues"

@@ -26,8 +26,8 @@ import getMarked from './docs/_utils/getMarked';
 const ENV = process.env.NODE_ENV;
 const $ = gulpLoadPlugins();
 const isProduction = ENV === 'production' || ENV === 'travisci';
-const banner = `/** ${pkg.title} v${pkg.version} | by Amaze UI Team
-  * (c) ${$.util.date(Date.now(), 'UTC:yyyy')} AllMobilize, Inc., Licensed under ${pkg.license}
+const banner = `/** ${pkg.title} v${pkg.version} | by Cloud Team
+  * (c) ${$.util.date(Date.now(), 'UTC:yyyy')} Thinker, Inc., Licensed under ${pkg.license}
   * ${$.util.date(Date.now(), 'isoDateTime')}
   */
   `;
@@ -366,7 +366,13 @@ gulp.task('docs:replace', () => {
   return merge(docs, ks);
 });
 
-gulp.task('app:server', () => {
+gulp.task('watch', () => {
+  // gulp.watch( appDir + '**/*.js', ['app:webpack']);
+  gulp.watch( appDir + '/*.html', ['html:replace']);
+  gulp.watch( appDir + '/style/*.scss', ['styleDev']);
+});
+
+gulp.task('app:server', ['watch'], () => {
   let bs = BS.create();
   bs.init({
     server: [appPaths.appDist],
@@ -437,78 +443,7 @@ import startWebpackConfig from './start/webpack.config';
 // import webpack2 from 'webpack';
 // run webpack
 gulp.task('app:webpack', (callback) => {
-  //new webpack.optimize.CommonsChunkPlugin(/* chunkName= */"vendor", /* filename= */"vendor.bundle.js")
-
-  // configuration
-  // return webpack(assign({}, {    //webpackConfig
-  //   // debug: !isProduction,
-  //   //devtool: 'source-map',
-  //   entry: {
-  //     // 'path': path.join(__dirname, './start/js'),
-  //     //分开打包，需要指定文件分组，并且配置resolve解释依赖文件的位置
-  //     'index': './' + appPaths.appEntry,//'index.js',//appPaths.appEntry,
-  //     // 'vendors': ['react', 'react-dom', 'redux', 'react-redux', 'redux-thunk', 'classnames'], //这里可以结合智能提取公共脚本插件
-  //   },
-  //
-  //   output: {
-  //     // library: 'AMUITouch',
-  //     // libraryTarget: 'umd',
-  //     // path: path.join(__dirname, '/dist/'),
-  //     filename: '[name].bundle.js'
-  //   },
-  //   // 新添加的module属性
-  //   module: {
-  //     //加载器配置 "-loader"其实是可以省略不写的，多个loader之间用“!”连接起来。
-  //     loaders: [
-  //       //.css 文件使用 style-loader 和 css-loader 来处理
-  //       // { test: /\.css$/, loader: 'style-loader!css-loader' },
-  //
-  //       //.js 文件使用 jsx-loader 来编译处理
-  //       { test: /\.js$/, exclude: /node_modules/, loader: 'babel!babel-loader' },  //loader: "babel"
-  //       // { test: /\.js$/, exclude: /node_modules/, loader: 'babel!jsx-loader?harmony' },  //loader: "babel"
-  //       // { test: /\.js$/, exclude: /node_modules/, loader: 'babel' },  //loader: "babel"
-  //
-  //       //.scss 文件使用 style-loader、css-loader 和 sass-loader 来编译处理
-  //       // { test: /\.scss$/, loader: 'style!css!sass?sourceMap'},
-  //
-  //       //图片文件使用 url-loader 来处理，小于8kb的直接转为base64
-  //       // { test: /\.(png|jpg|svg)$/, loader: 'url-loader?limit=8192'}
-  //       //配置信息的参数“?limit=8192”表示将所有小于8kb的图片都转为base64形式（其实应该说超过8kb的才使用 url-loader 来映射到文件，否则转为data url形式）。
-  //     ]
-  //   },
-  //   //其它解决方案配置
-  //   resolve: {
-  //     //查找module的话从这里开始查找
-  //     // root: 'E:/github/flux-example/src', //绝对路径
-  //     // 这里 root 指谁的根，项目根目录？可以配置 path.join(__dirname, '/src/js') 吗
-  //     // root: path.join(__dirname, 'node_modules'),
-  //     // root: [process.cwd() + '/node_modules'],
-  //     // modulesDirectories: ["node_modules"],
-  //
-  //     //自动扩展文件后缀名，意味着我们require模块可以省略不写后缀名
-  //     extensions: ['', '.js', '.json', '.jsx'],
-  //     // extensions: ['', '.js', '.json', '.jsx', ,'.es6', '.scss'],
-  //
-  //     //模块别名定义，方便后续直接引用别名，无须多写长长的地址
-  //     // alias: {
-  //     //   babel_polyfill : './babel/dist/polyfill',//后续直接 require('AppStore') 即可
-  //     //   // ActionType : 'js/actions/ActionType.js',
-  //     //   // AppAction : 'js/actions/AppAction.js'
-  //     // }
-  //   }
-  // }), function(err, stats) {
-  //     // if(err) throw new  $.util.PluginError("webpack", err);
-  //     $.util.log("[webpack]", stats.toString({
-  //         // output options
-  //     }));
-  //     callback();
-  // });
-
-
   return gulp.src(appPaths.appEntry)
-    // .pipe(named())
-    // .pipe(source())
-    // .pipe(buffer())
     .pipe(webpack(assign({}, startWebpackConfig, {  //startWebpackConfig
       // debug: !isProduction,
       entry: {
@@ -537,8 +472,7 @@ gulp.task('start', (callback) => {
 
   runSequence(
     'clean:app',
-    // ['styleDev', 'html:replace', 'app:build'],
-    ['html:replace', 'app:webpack'],
+    ['styleDev', 'html:replace', 'app:webpack'],
     'app:server',
     callback);
 });

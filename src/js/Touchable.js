@@ -13,7 +13,7 @@ import React from 'react';
 import TouchableMixin from './mixins/TouchableMixin';
 import createChainedFunction from './utils/createChainedFunction';
 import supportTouch from './utils/isTouchSupported';
-import './utils/UCUIController';
+import './utils/ucUIControl';
 
 const Touchable = React.createClass({
   mixins: [TouchableMixin],

@@ -36,3 +36,6 @@ export {default as View} from './View';
 
 // Mixins
 export * from './mixins';
+
+// Compatibility fallback
+import './utils/fallback';

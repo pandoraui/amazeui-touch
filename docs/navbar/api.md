@@ -86,6 +86,4 @@ if (/android/i.test(ua) && /ucbrowser/i.test(ua)) {
 }
 ```
 
-由于测试面有限，上面的 JS 暂未添加到源码， 需要开发者手动添加到项目中（样式已经集成在 CSS 文件中，）。
-
 ## 示例

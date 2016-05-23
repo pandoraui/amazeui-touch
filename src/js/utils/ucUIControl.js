@@ -15,4 +15,4 @@ function ucUIControl(feature, state) {
 // disable gesture
 ucUIControl('gesture', false);
 
-export default ucUIControl
+export default ucUIControl;

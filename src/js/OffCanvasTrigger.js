@@ -1,5 +1,10 @@
-import React, {cloneElement} from 'react';
-import ReactDOM from 'react-dom';
+import React, {
+  cloneElement,
+  PropTypes,
+} from 'react';
+import {
+  findDOMNode,
+} from 'react-dom';
 import ClassNameMixin from './mixins/ClassNameMixin';
 import OverlayMixin from './mixins/OverlayMixin';
 import CSSCore from './utils/CSSCore';
@@ -10,13 +15,13 @@ const OffCanvasTrigger = React.createClass({
   mixins: [OverlayMixin, ClassNameMixin],
 
   propTypes: {
-    defaultOffCanvasActive: React.PropTypes.bool,
-    placement: React.PropTypes.oneOf(['left', 'right']),
-    animation: React.PropTypes.oneOf(['slide', 'push']),
-    offCanvas: React.PropTypes.node.isRequired,
-    pageContainer: React.PropTypes.node,
-    onOpen: React.PropTypes.func,
-    onClosed: React.PropTypes.func,
+    defaultOffCanvasActive: PropTypes.bool,
+    placement: PropTypes.oneOf(['left', 'right']),
+    animation: PropTypes.oneOf(['slide', 'push']),
+    offCanvas: PropTypes.node.isRequired,
+    pageContainer: PropTypes.node,
+    onOpen: PropTypes.func,
+    onClosed: PropTypes.func,
   },
 
   getDefaultProps() {
@@ -39,10 +44,6 @@ const OffCanvasTrigger = React.createClass({
   },
 
   componentDidMount() {
-    if (this.props.defaultOffCanvasActive) {
-      this.updateOffCanvasPosition();
-    }
-
     this.setPageContainer();
   },
 
@@ -112,8 +113,7 @@ const OffCanvasTrigger = React.createClass({
     } = this.props;
 
     return typeof pageContainer === 'string' ?
-      document.querySelector(pageContainer) :
-      ReactDOM.findDOMNode(pageContainer);
+      document.querySelector(pageContainer) : findDOMNode(pageContainer);
   },
 
   setPageContainer() {

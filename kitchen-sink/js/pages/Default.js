@@ -55,12 +55,12 @@ const Default = React.createClass({
     return (
       <View id="app-index">
         <NavBar
-          amStyle="primary"
-          title="Amaze UI Touch"
+          amStyle=""
+          title="SMACSS-BEM"
         />
         <Container scrollable>
           <Group
-            header="Amaze UI Touch Components"
+            header="SMACSS Components"
             noPadded
           >
             <List>

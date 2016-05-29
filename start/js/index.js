@@ -11,10 +11,10 @@ import configureStore from './store/configureStore'
 
 const store = configureStore()
 
-let rootElement = document.getElementById('root');
+// let rootElement = document.getElementById('root');
 render(
   <Provider store={store}>
     <ReduxRouter />
   </Provider>,
-  rootElement
+  document.getElementById('root')
 );

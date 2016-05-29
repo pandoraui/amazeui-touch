@@ -41,7 +41,7 @@ class App extends Component {
   render() {
     const { children, inputValue } = this.props
     return (
-      <div>
+      <div className="container container-fill container-column">
         <Explore value={inputValue}
                  onChange={this.handleChange} />
         <hr />

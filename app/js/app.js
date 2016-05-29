@@ -1,17 +1,7 @@
 import React from 'react';
-import {
-  render,
-} from 'react-dom';
-import {
-  Router,
-  Route,
-  Link,
-  IndexRoute,
-} from 'react-router';
-import {
-  Container,
-  TabBar,
-} from 'amazeui-touch';
+import { render, } from 'react-dom';
+import { Router, Route, Link, IndexRoute, } from 'react-router';
+import { Container, TabBar, } from 'amazeui-touch';
 
 const App = React.createClass({
   render() {

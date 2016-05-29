@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  View,
-  NavBar,
-} from 'amazeui-touch';
-import {
-  Link,
-} from 'react-router';
+import { View, NavBar, } from 'amazeui-touch';
+import { Link, } from 'react-router';
 
 import Page1 from './Page1';
 import Page2 from './Page2';

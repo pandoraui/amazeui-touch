@@ -106,7 +106,7 @@ const Detail = React.createClass({
         <NavBar
           title={component}
           leftNav={[backNav]}
-          amStyle="primary"
+          amStyle=""
         />
         <Component scrollable className="sk-demos" />
       </View>

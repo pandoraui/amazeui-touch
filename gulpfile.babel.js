@@ -23,6 +23,8 @@ import BS from 'browser-sync';
 import pkg from './package.json';
 import getMarked from './docs/_utils/getMarked';
 
+import through from 'through2';
+
 const ENV = process.env.NODE_ENV;
 const $ = gulpLoadPlugins();
 const isProduction = ENV === 'production' || ENV === 'travisci';
@@ -64,6 +66,9 @@ var resetPaths = function(dir, entryJs){
   entryJs = entryJs || 'app.js';
   appDir = dir || 'docs/_app';
   appPaths = {
+    quoteSrc: `src`,
+    quoteStyles: `src/styles/quote.scss`,
+    quotePage: `${appDir}/index.html`,
     imgs: `${appDir}/i/*`,
     js: `${appDir}/js/app.js`,
     styleDir: `${appDir}/style`,
@@ -372,6 +377,11 @@ gulp.task('watch', () => {
   gulp.watch( appDir + '/style/*.scss', ['styleDev']);
 });
 
+gulp.task('watch:webpack', () => {
+  // gulp.watch( appDir + '**/*.js', ['app:webpack']);
+  gulp.watch( appDir + '/js/**/*.js', ['app:webpack']);
+});
+
 gulp.task('app:server', ['watch'], () => {
   let bs = BS.create();
   bs.init({
@@ -403,7 +413,9 @@ gulp.task('ks', (callback) => {
 
   runSequence(
     'clean:app',
+    'quote:styles',
     ['styleDev', 'html:replace', 'app:build'],
+    'watch:quote:styles',
     'app:server',
     callback);
 });
@@ -423,8 +435,8 @@ gulp.task('dev', (callback) => {
 
   runSequence(
     'clean:app',
-    // ['styleDev', 'html:replace', 'app:build'],
-    ['styleDev', 'html:replace', 'app:webpack'],
+    ['styleDev', 'html:replace', 'app:build'],
+    // ['styleDev', 'html:replace', 'app:webpack'],
     'app:server',
     callback);
 });
@@ -444,9 +456,12 @@ import startWebpackConfig from './start/webpack.config';
 // run webpack
 gulp.task('app:webpack', (callback) => {
   return gulp.src(appPaths.appEntry)
+
     .pipe(webpack(assign({}, startWebpackConfig, {  //startWebpackConfig
-      // debug: !isProduction,
+      debug: true,//!isProduction,
       entry: {
+        // watch: true,
+        devtool: 'source-map', //生成sourcemap,便于开发调试
         // 'path': path.join(__dirname, './start/js'),
         //分开打包，需要指定文件分组，并且配置resolve解释依赖文件的位置
         'index': './' + appPaths.appEntry,//'index.js',//appPaths.appEntry,
@@ -456,9 +471,18 @@ gulp.task('app:webpack', (callback) => {
         filename: '[name].bundle.js'
       },
     })))
+    .pipe($.sourcemaps.init({loadMaps: true}))
     // .pipe(replaceVersion())
     // .pipe(addBanner())
     // .pipe($.rename('app.js'))
+    .pipe(through.obj(function (file, enc, cb) {
+      // Dont pipe through any source map files as it will be handled
+      // by gulp-sourcemaps
+      var isSourceMap = /\.map$/.test(file.path);
+      if (!isSourceMap) this.push(file);
+      cb();
+    }))
+    .pipe($.sourcemaps.write())
     .pipe(gulp.dest(appPaths.appDist + '/js'))
     .pipe($.uglify())
     // .pipe(addBanner())
@@ -472,9 +496,44 @@ gulp.task('start', (callback) => {
 
   runSequence(
     'clean:app',
-    ['styleDev', 'html:replace', 'app:webpack'],
+    'quote:styles',
+    // ['styleDev', 'html:replace', 'app:webpack'],
+    ['styleDev', 'html:replace', 'app:build'],
+    // 'watch:webpack',
+    // 'watch:quote',
     'app:server',
     callback);
+});
+
+
+
+
+
+
+
+// 编译 SCSS，添加浏览器前缀
+// 要配置 autoprefixerOptions
+gulp.task('quote:styles', function () {
+  var s = (
+    gulp.src(appPaths.quoteStyles)
+    .pipe($.rename('smacss.css'))
+    .pipe($.sourcemaps.init())
+    //.pipe($.plumber())  //自动处理全部错误信息防止因为错误而导致 watch 不正常工作
+    .pipe($.sass())
+    .pipe($.autoprefixer(autoprefixerOptions))
+    .pipe($.sourcemaps.write())
+
+    .pipe(gulp.dest(appPaths.appDist + '/css'))
+  );
+  return !isProduction ? s : s.pipe($.csso())
+    .pipe($.rename({suffix: '.min'}))
+    .pipe(md5(10, appPaths.quotePage))
+    .pipe(gulp.dest(appPaths.appDist + '/css'))
+    .pipe($.size({title: 'styles'}));
+});
+gulp.task('watch:quote:styles', () => {
+  // gulp.watch( appDir + '**/*.js', ['app:webpack']);
+  gulp.watch( appPaths.quoteSrc + '/styles/**/*.scss', ['quote:styles']);
 });
 
 

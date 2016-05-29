@@ -84,13 +84,25 @@
 
 `name` 属性应用到内部的 `input` 元素上，可用于传统的表单提交。
 
+##### `value`
+
+> PropType: `bool`
+
+`value` 值应用到内部 `input` 元素的 `defaultChecked` 属性上，设置是否选中（[*uncontrolled*](http://facebook.github.io/react/docs/forms.html#uncontrolled-components)）。
+
+##### `disabled`
+
+> PropType: `bool`
+
+是否禁用 Switch。
+
 ##### `onValueChange`
 
 > PropType: `func`
 
 Switch 值发生变化时处理函数。
 
-#### Refs
+#### Ref
 
 ##### `field`
 
@@ -99,6 +111,20 @@ Switch 值发生变化时处理函数。
 ```javascript
 function handleSwitch() {
   console.log(this.refs.field.checked);
+}
+
+const mySwitch = <Switch onValueChange={handleSwitch} />;
+```
+
+#### 方法
+
+##### `.getValue()`
+
+获取状态，同使用 `ref` 一样，选中时返回 `true`，否则返回 `false`。
+
+```javascript
+function handleSwitch() {
+  console.log(this.getValue());
 }
 
 const mySwitch = <Switch onValueChange={handleSwitch} />;

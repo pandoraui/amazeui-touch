@@ -29,7 +29,7 @@ const TabBarDemo = React.createClass({
     return (
       <TabBar
         amStyle="primary"
-        onSelect={this.handleClick}
+        onAction={this.handleClick}
       >
         <TabBar.Item
           eventKey="home"

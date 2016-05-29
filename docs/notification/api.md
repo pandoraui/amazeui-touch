@@ -1,6 +1,6 @@
 # Notification
 
-通知组件，用于显示通知信息，
+通知组件，用于显示通知信息。
 
 ## 组件
 
@@ -45,6 +45,12 @@
 > PropType: `bool`
 
 通知栏是否可见，使用时 `visible` 为 `true` 打开通知，否则关闭。
+
+##### `static`
+
+> PropType: `bool`
+
+是否渲染为静态的通知栏。
 
 ##### `onDismiss`
 

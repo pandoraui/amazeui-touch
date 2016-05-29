@@ -75,14 +75,14 @@ const NotificationExample = React.createClass({
         </Notification>
 
         <Group
-          header="样式展示"
+          header="静态通知栏样式展示"
         >
-          <Notification visible>这是一个通知 :)</Notification>
-          <Notification visible amStyle="primary">这是一个通知 :)</Notification>
-          <Notification visible amStyle="secondary">这是一个通知 :)</Notification>
-          <Notification visible amStyle="success">这是一个通知 :)</Notification>
-          <Notification visible amStyle="warning">这是一个通知 :)</Notification>
-          <Notification visible amStyle="alert">这是一个通知 :)</Notification>
+          <Notification visible static>这是一个通知 :)</Notification>
+          <Notification visible static amStyle="primary">这是一个通知 :)</Notification>
+          <Notification visible static amStyle="secondary">这是一个通知 :)</Notification>
+          <Notification visible static amStyle="success">这是一个通知 :)</Notification>
+          <Notification visible static amStyle="warning">这是一个通知 :)</Notification>
+          <Notification visible static amStyle="alert">这是一个通知 :)</Notification>
         </Group>
       </Container>
     );

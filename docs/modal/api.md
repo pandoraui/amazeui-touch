@@ -17,6 +17,12 @@ Modal 组件，用于弹出内容，实现 alert、confirm、prompt、loading、
 
 Modal 形式，不设置时为普通的模态窗口。
 
+##### `isOpen`
+
+> PropType: `bool`
+
+Modal 是否为打开状态。
+
 ##### `title`
 
 > PropType: `node`
@@ -47,11 +53,13 @@ Modal 标题。
 
 点击遮罩层是否关闭 Modal。
 
-##### `onSelect`
+##### `onAction`
 
 > PropType: `func`
 
 用户点击「确定」或「取消」按钮时的处理函数。
+
+`role` 为 `prompt` 时，通过该函数的返回值可以控制按钮点击时是否关闭 Modal。
 
 ##### `onOpen`
 
@@ -65,10 +73,18 @@ Modal 打开时的回调函数。
 
 Modal 关闭以后的回调函数。
 
+##### `onDismiss`
+
+> PropType: `func`
+
+用户请求关闭操作时的处理函数。
+
 
 #### 方法
 
-调用方式见示例代码。
+~~调用方式见示例代码。~~
+
+**Modal 实现方式调整，请勿直接调用其方法。**
 
 ##### `.open()`
 

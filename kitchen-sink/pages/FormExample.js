@@ -32,10 +32,10 @@ let fields = [
 const devices = ['iPhone 6', 'MacBook Pro Retina', 'iMac 5K'];
 
 function handleSwitch() {
-  console.log(this.refs.field.checked);
+  console.log(this.getValue());
 }
 
-const mySwitch = <Switch onValueChange={handleSwitch} />;
+const mySwitch = <Switch onValueChange={handleSwitch} defaultChecked />;
 
 const FormExample = React.createClass({
   render() {

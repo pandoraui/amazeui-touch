@@ -28,7 +28,7 @@ const Col = React.createClass({
       component: Component,
       className,
       ...props,
-      } = this.props;
+    } = this.props;
     let classSet = this.getClassSet();
 
     if (cols) {

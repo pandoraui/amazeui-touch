@@ -12,7 +12,7 @@ const Accordion = React.createClass({
     activeKey: React.PropTypes.any,
     defaultActiveKey: React.PropTypes.any,
     inset: React.PropTypes.bool,
-    onSelect: React.PropTypes.func,
+    onAction: React.PropTypes.func,
   },
 
   getDefaultProps() {
@@ -28,16 +28,16 @@ const Accordion = React.createClass({
   },
 
   shouldComponentUpdate: function() {
-    // Defer any updates to this component during the `onSelect` handler.
+    // Defer any updates to this component during the `onAction` handler.
     return !this._isChanging;
   },
 
   handleSelect(e, key) {
     e.preventDefault();
 
-    if (this.props.onSelect) {
+    if (this.props.onAction) {
       this._isChanging = true;
-      this.props.onSelect(key);
+      this.props.onAction(key);
       this._isChanging = false;
     }
 
@@ -57,11 +57,10 @@ const Accordion = React.createClass({
     return React.Children.map(this.props.children, (child, index) => {
       let {
         eventKey,
-        key,
-        } = child.props;
+      } = child.props;
       let props = {
-        key: key ? key : index,
-        onSelect: this.handleSelect,
+        key: index,
+        onAction: this.handleSelect,
       };
 
       if (eventKey === undefined) {
@@ -99,10 +98,12 @@ Accordion.Item = React.createClass({
   },
 
   handleClick: function(e) {
+    // @see https://facebook.github.io/react/docs/events.html#event-pooling
+    e.persist();
     e.selected = true;
 
-    if (this.props.onSelect) {
-      this.props.onSelect(e, this.props.eventKey);
+    if (this.props.onAction) {
+      this.props.onAction(e, this.props.eventKey);
     } else {
       e.preventDefault();
     }

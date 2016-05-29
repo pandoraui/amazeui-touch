@@ -12,14 +12,14 @@ let TabBar = React.createClass({
     classPrefix: React.PropTypes.string,
     component: React.PropTypes.node,
     amStyle: React.PropTypes.string,
-    onSelect: React.PropTypes.func,
+    onAction: React.PropTypes.func,
   },
 
   getDefaultProps() {
     return {
       classPrefix: 'tabbar',
       component: 'nav',
-      onSelect: function() {}
+      onAction: function() {}
     };
   },
 
@@ -29,7 +29,7 @@ let TabBar = React.createClass({
       component: Component,
       className,
       children,
-      onSelect,
+      onAction,
       ...props
       } = this.props;
 
@@ -40,13 +40,12 @@ let TabBar = React.createClass({
       >
         {React.Children.map(children, (child, index) => {
           let {
-            key,
             eventKey,
             onClick,
             ...props
             } = child.props;
-          let clickHandler = onClick || onSelect;
-          key = key || eventKey || index;
+          let clickHandler = onClick || onAction;
+          let key = eventKey || index;
           eventKey = eventKey || key;
 
           return (
@@ -65,7 +64,7 @@ let TabBar = React.createClass({
 
 // TODO:
 //   Icon 应该支持用户自定义：
-//   React-native 采用 require('path/to/iocn') 的形式，
+//   React-native 采用 require('path/to/icon') 的形式，
 //   这里可能需要再添加一个属性
 TabBar.Item = React.createClass({
   mixins: [ClassNameMixin],
@@ -90,7 +89,7 @@ TabBar.Item = React.createClass({
     return {
       classPrefix: 'tabbar',
       component: 'span',
-      onSelect: function() {
+      onAction: function() {
       }
     };
   },

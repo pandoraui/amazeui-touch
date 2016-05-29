@@ -23,7 +23,7 @@ const List = React.createClass({
       className,
       inset,
       ...props
-      } = this.props;
+    } = this.props;
 
     classSet[this.prefixClass('inset')] = inset;
 
@@ -69,12 +69,13 @@ List.Item = React.createClass({
       subTitle,
       href,
       linkComponent,
-      } = this.props;
+    } = this.props;
 
     let itemTitle = title ? (
       <h3
         key="itemTitle"
-        className={this.prefixClass('title')}>
+        className={this.prefixClass('title')}
+      >
         {title}
       </h3>
     ) : null;
@@ -107,7 +108,7 @@ List.Item = React.createClass({
       subTitle,
       desc,
       children
-      } = this.props;
+    } = this.props;
     let titleRow = this.renderTitleRow();
     let notJustTitle = media || subTitle || desc || children;
 
@@ -131,7 +132,7 @@ List.Item = React.createClass({
       linkProps,
       href,
       target,
-      } = this.props;
+    } = this.props;
 
     return linkComponent ?
       React.createElement(linkComponent, linkProps, children) : (
@@ -168,7 +169,7 @@ List.Item = React.createClass({
       linked,
       nested,
       ...props
-      } = this.props;
+    } = this.props;
     let itemChildren = [
       this.renderAddon('media'),
       this.renderMain(),

@@ -11,9 +11,7 @@
  */
 
 import CSSCore from './CSSCore';
-
-let canUseDOM = !!(typeof window !== 'undefined' &&
-  window.document && window.document.createElement);
+import canUseDOM from './canUseDOM';
 
 /**
  * EVENT_NAME_MAP is used to determine which event fired when a

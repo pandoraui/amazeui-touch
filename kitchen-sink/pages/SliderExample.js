@@ -6,13 +6,13 @@ import {
   Slider,
 } from 'amazeui-touch';
 
-const onSelect = function(index, direction) {
+const onAction = function(index, direction) {
   console.log('激活的幻灯片编号：', index, '，滚动方向：', direction);
 };
 
 const sliderIntance = (
   <Slider
-    onSelect={onSelect}
+    onAction={onAction}
   >
     <Slider.Item>
       <img

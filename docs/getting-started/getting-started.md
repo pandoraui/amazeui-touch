@@ -5,7 +5,9 @@
 ### 开发环境配置
 
 - 下载安装 [Node.js](https://nodejs.org/en/download/)（推荐使用 `4.x` LTS 最新正式版）
-- 一些 npm 模块编译需要环境支持，Windows 用户会麻烦一些，具体配置说明参见：https://github.com/nodejs/node-gyp#installation
+- 一些 npm 模块编译需要环境支持，Windows 用户会麻烦一些，具体配置说明参见：
+  - [https://github.com/nodejs/node-gyp#installation]()
+  - [Setting up Node.js on Windows 10](https://blog.risingstack.com/node-js-windows-10-tutorial/)
 
 ### 预备知识
 
@@ -34,17 +36,14 @@
 
 - [Flexbox](http://caniuse.com/#feat=flexbox)
 
-  Amaze UI Touch 完全基于 flexbox 布局。由于[旧版规范](http://www.w3.org/TR/2009/WD-css3-flexbox-20090723/)中没有 `flex-shrink`、`flex-basis` 对应的属性，导致只支持旧版规范的浏览器无法正常渲染布局，暂时[没有找到解决方法（望赐教）](https://github.com/amazeui/amazeui-touch/issues/12) :( 。
-
-  - **致各[浏览器毒瘤](http://www.zhihu.com/question/37361845)：**没有金刚钻，别揽瓷器活。乃们美其名曰自主研发，不如说是从不同体位搞残开源内核，浪费社会资源，阻碍行业发展。搞些狗皮膏功能用得着修改内核么？拜托乃们行行好，不要给前端开发者制造麻烦了！
-  - **致从业者：**请推荐周围的人使用 Safari、Chrome、Firefox 等现代浏览器，抵制膏药浏览器，保障数据安全，节约社会资源，关爱你身边的前端开发者。
+  Amaze UI Touch 完全基于 flexbox 布局。由于[旧版规范](http://www.w3.org/TR/2009/WD-css3-flexbox-20090723/)中没有 `flex-shrink`、`flex-basis`、`flex-wrap` 对应的属性，导致只支持旧版规范的浏览器无法正常渲染布局,暂时[~~没有找到解决方法（望赐教）~~](https://github.com/amazeui/amazeui-touch/issues/12) 通过回退方式处理，在 Android UC 上测试通过，有待进行更多测试 :( 。
 - [CSS3 Transitions](http://caniuse.com/#feat=css-transitions)
 - [CSS Animation](http://caniuse.com/#feat=css-animation)
 
 ### JavaScript
 
 - ES5: Amaze UI Touch 基于 ES2015 编写，使用 Babel.js 转换为 ES5；
-- React.js: 0.1.x 兼容至 IE8。
+- React.js: ~~0.1.x 兼容至 IE8~~ `15.x` 兼容至 IE9。
 
 ## 编写页面
 
@@ -74,6 +73,10 @@ ReactDOM.render(<Button>Hello World</Button>, document.getElementById('root'));
 
 HTML：
 
+**注意：**
+
+- `amazeui.touch.css`、`amazeui.touch.min.css` 位于 `node_modules/amazeui-touch/dist` 下。
+
 ```html
 <!DOCTYPE html>
 <html>
@@ -82,8 +85,7 @@ HTML：
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="">
   <meta name="keywords" content="">
-  <meta name="viewport"
-        content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Amaze UI Touch</title>
   <meta name="renderer" content="webkit">
   <!-- No Baidu Siteapp-->
@@ -105,3 +107,5 @@ HTML：
 ```
 
 进阶使用可参见 kitchen-sink 源码。
+
+[debug]: http://www.zhihu.com/question/37361845

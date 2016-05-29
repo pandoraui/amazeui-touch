@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {
+  PropTypes,
+} from 'react';
 import classNames from 'classnames';
 import ClassNameMixin from './mixins/ClassNameMixin';
 
@@ -6,17 +8,23 @@ const Switch = React.createClass({
   mixins: [ClassNameMixin],
 
   propTypes: {
-    classPrefix: React.PropTypes.string.isRequired,
-    name: React.PropTypes.string,
-    amStyle: React.PropTypes.string,
-    onValueChange: React.PropTypes.func,
+    classPrefix: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    amStyle: PropTypes.string,
+    disabled: PropTypes.bool,
+    value: PropTypes.bool,
+    onValueChange: PropTypes.func,
   },
 
   getDefaultProps() {
     return {
       classPrefix: 'switch',
-      onValueChange: function() {},
+      onValueChange: () => {},
     };
+  },
+
+  getValue() {
+    return this.refs.field.checked;
   },
 
   render() {
@@ -25,8 +33,10 @@ const Switch = React.createClass({
       name,
       className,
       onValueChange,
+      value,
+      disabled,
       ...props
-      } = this.props;
+    } = this.props;
 
     return (
       <label
@@ -38,6 +48,8 @@ const Switch = React.createClass({
           name={name}
           type="checkbox"
           ref="field"
+          defaultChecked={value}
+          disabled={disabled}
         />
         <span className={this.prefixClass('label')} />
       </label>

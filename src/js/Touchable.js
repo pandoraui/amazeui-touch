@@ -13,6 +13,7 @@ import React from 'react';
 import TouchableMixin from './mixins/TouchableMixin';
 import createChainedFunction from './utils/createChainedFunction';
 import supportTouch from './utils/isTouchSupported';
+import './utils/ucUIControl';
 
 const Touchable = React.createClass({
   mixins: [TouchableMixin],
@@ -32,7 +33,7 @@ const Touchable = React.createClass({
       component: Component,
       onTap,
       ...props,
-      } = this.props;
+    } = this.props;
 
     if (supportTouch) {
       Object.assign(props, this.getTouchHandlers());

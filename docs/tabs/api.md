@@ -16,7 +16,7 @@
 
 激活选项卡的 `eventKey`。
 
-##### `onSelect`
+##### `onAction`
 
 > PropType: `func`
 
@@ -48,6 +48,12 @@
 > PropType: `bool`
 
 是否禁用该选项卡。
+
+##### `noPadded`
+
+> PropType: `bool`
+
+是否移除选项卡面板的内边距（`padding`）。
 
 ##### `navStyle`
 

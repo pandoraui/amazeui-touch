@@ -10,7 +10,7 @@ const Tabs = React.createClass({
   propTypes: {
     classPrefix: React.PropTypes.string,
     defaultActiveKey: React.PropTypes.any,
-    onSelect: React.PropTypes.func,
+    onAction: React.PropTypes.func,
   },
 
   getDefaultProps() {
@@ -59,8 +59,8 @@ const Tabs = React.createClass({
       return null;
     }
 
-    if (this.props.onSelect) {
-      this.props.onSelect(key);
+    if (this.props.onAction) {
+      this.props.onAction(key);
     }
 
     if (activeKey !== key) {
@@ -77,14 +77,13 @@ const Tabs = React.createClass({
     let navs = React.Children.map(this.props.children, (child, index) => {
       let {
         eventKey,
-        key,
         disabled,
         navSize,
         navStyle,
-        } = child.props;
+      } = child.props;
+      let key = index;
 
       eventKey = eventKey !== undefined ? eventKey : index;
-      key = key === undefined ? index : key;
       let active = eventKey === activeKey;
 
       return (
@@ -118,10 +117,10 @@ const Tabs = React.createClass({
     let activeKey = this.state.activeKey;
     let panels = React.Children.map(this.props.children, (child, index) => {
       let {
-        key,
         eventKey,
-        children
-        } = child.props;
+        children,
+        ...props
+      } = child.props;
 
       if (eventKey === undefined) {
         eventKey = index;
@@ -131,7 +130,8 @@ const Tabs = React.createClass({
         <Tabs.Item
           active={eventKey === activeKey}
           enventKey={eventKey}
-          key={key ? key : 'tabPanel' + index}
+          key={'tabPanel' + index}
+          {...props}
         >
           {children}
         </Tabs.Item>
@@ -152,7 +152,7 @@ const Tabs = React.createClass({
     let {
       className,
       ...props
-      } = this.props;
+    } = this.props;
 
     return (
       <div
@@ -175,6 +175,7 @@ Tabs.Item = React.createClass({
     eventKey: React.PropTypes.any,
     disabled: React.PropTypes.bool,
     active: React.PropTypes.bool,
+    noPadded: React.PropTypes.bool,
     navSize: React.PropTypes.string,
     navStyle: React.PropTypes.string,
   },
@@ -190,10 +191,13 @@ Tabs.Item = React.createClass({
     let {
       className,
       children,
+      noPadded,
       ...props
-      } = this.props;
+    } = this.props;
+    const elementName = 'panel';
 
-    classSet[this.prefixClass('panel')] = true;
+    classSet[this.prefixClass(elementName)] = true;
+    classSet[this.prefixClass(`${elementName}-no-padded`)] = noPadded;
 
     return (
       <div
@@ -207,3 +211,5 @@ Tabs.Item = React.createClass({
 });
 
 export default Tabs;
+
+// TODO: Nav 的可定制性，如允许传入 Router 的 Link 组件

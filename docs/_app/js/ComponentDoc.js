@@ -75,7 +75,6 @@ const ComponentDoc = React.createClass({
 
     return (
       <Container
-        direction="row"
         fill
         role="doc-main"
       >

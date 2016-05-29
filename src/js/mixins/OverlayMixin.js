@@ -1,5 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {
+  findDOMNode,
+  unmountComponentAtNode,
+  unstable_renderSubtreeIntoContainer as renderSubtreeIntoContainer,
+} from 'react-dom';
 
 /**
  * Overlay Mixin
@@ -24,28 +28,33 @@ export default {
   componentWillUnmount() {
     this._unmountOverlay();
 
-    if (this._overlayWrapper) {
-      this.getContainerDOMNode().removeChild(this._overlayWrapper);
-      this._overlayWrapper = null;
+    if (this._node) {
+      this.getContainerDOMNode().removeChild(this._node);
+      this._node = null;
     }
   },
 
   // Create Overlay wrapper
-  _mountOverlayWrapper() {
-    this._overlayWrapper = document.createElement('div');
-    this.getContainerDOMNode().appendChild(this._overlayWrapper);
+  _createPortal() {
+    this._node = document.createElement('div');
+    this._node.className = '__overlay-portal';
+    this.getContainerDOMNode().appendChild(this._node);
   },
 
   // Render Overlay to wrapper
   _renderOverlay() {
-    if (!this._overlayWrapper) {
-      this._mountOverlayWrapper();
+    if (!this._node) {
+      this._createPortal();
     }
 
     let overlay = this.renderOverlay();
 
     if (overlay !== null) {
-      this._overlayInstance = ReactDOM.render(overlay, this._overlayWrapper);
+      this._overlayInstance = renderSubtreeIntoContainer(
+        this,
+        overlay,
+        this._node
+      );
     } else {
       // Unmount if the component is null for transitions to null
       this._unmountOverlay();
@@ -54,7 +63,7 @@ export default {
 
   // Remove a mounted Overlay from wrapper
   _unmountOverlay() {
-    ReactDOM.unmountComponentAtNode(this._overlayWrapper);
+    unmountComponentAtNode(this._node);
     this._overlayInstance = null;
   },
 
@@ -67,7 +76,7 @@ export default {
 
     if (this._overlayInstance) {
       // 包含 backdrop 时通过 refer 返回 overlay DOM 节点
-      return ReactDOM.findDOMNode(this._overlayInstance.refs &&
+      return findDOMNode(this._overlayInstance.refs &&
         this._overlayInstance.refs.overlay || this._overlayInstance);
     }
 
@@ -75,6 +84,6 @@ export default {
   },
 
   getContainerDOMNode() {
-    return ReactDOM.findDOMNode(this.props.container) || document.body;
-  }
+    return findDOMNode(this.props.container) || document.body;
+  },
 };

@@ -1,7 +1,5 @@
 import React, {cloneElement} from 'react';
 import ReactDOM from 'react-dom';
-import classNames from 'classnames';
-import ClassNameMixin from './mixins/ClassNameMixin';
 import TransitionEvents from './utils/TransitionEvents';
 import OverlayMixin from './mixins/OverlayMixin';
 import dom from './utils/domUtils';
@@ -110,7 +108,7 @@ const PopoverTrigger = React.createClass({
     let {
       height: targetHeight,
       width: targetWidth,
-      } = targetOffset;
+    } = targetOffset;
     let windowHeight = window.innerHeight;
     let windowWidth = window.innerWidth;
     let anglePosition, angleLeft, angleTop;
@@ -219,7 +217,7 @@ const PopoverTrigger = React.createClass({
       angleLeft,
       angleTop,
       placement,
-      } = this.state;
+    } = this.state;
 
     if (isClosing) {
       let node = this.getOverlayDOMNode();
@@ -238,15 +236,15 @@ const PopoverTrigger = React.createClass({
     }
 
     return cloneElement(popover, {
-        positionLeft,
-        positionTop,
-        angleLeft,
-        angleTop,
-        anglePosition,
-        placement,
-        isClosing,
-        onDismiss: this.close,
-      });
+      positionLeft,
+      positionTop,
+      angleLeft,
+      angleTop,
+      anglePosition,
+      placement,
+      isClosing,
+      onDismiss: this.close,
+    });
   },
 
   render() {

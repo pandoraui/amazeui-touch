@@ -44,7 +44,7 @@ const Card = React.createClass({
       header,
       footer,
       ...props
-      } = this.props;
+    } = this.props;
 
     return (
       <div
@@ -86,7 +86,7 @@ Card.Child = React.createClass({
       className,
       cover,
       ...props
-      } = this.props;
+    } = this.props;
     let classSet = {
       className,
       [this.prefixClass(role)]: true,

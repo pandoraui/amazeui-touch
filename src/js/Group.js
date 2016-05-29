@@ -36,7 +36,7 @@ let Group = React.createClass({
       footer,
       noPadded,
       ...props,
-      } = this.props;
+    } = this.props;
     let classSet = this.getClassSet();
     classSet[this.prefixClass('no-padded')] = noPadded;
 

@@ -1,5 +1,20 @@
+[role="doc-main"] {
+  display: flex;
+
+  @media (min-width: 641px) {
+    flex-direction: row;
+  }
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    height: 100%;
+  }
+}
+
 .doc-content-container {
-  flex: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -103,6 +118,11 @@
     padding: 0 15px;
     color: #777777;
   }
+}
+
+.doc-version {
+  color: #999;
+  font-variant: small-caps;
 }
 
 /* doc content */

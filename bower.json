@@ -1,0 +1,43 @@
+{
+  "name": "amazeui-touch",
+  "description": "Web Components for Mobile UI based on React.js",
+  "main": [
+    "dist/amazeui.touch.min.css",
+    "dist/amazeui.touch.min.js"
+  ],
+  "authors": [
+    "AllMobilize Inc."
+  ],
+  "license": "MIT",
+  "keywords": [
+    "amazeui",
+    "react",
+    "react-component",
+    "amazeui-touch",
+    "react-amazeui",
+    "web-components"
+  ],
+  "homepage": "https://github.com/amazeui/amazeui-touch",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "docs",
+    "kitchen-sink",
+    "lib",
+    "src",
+    "www",
+    "gulpfile.babel.js",
+    "webpack.config.js"
+  ],
+  "dependencies": {
+    "react": "^15.0.2"
+  }
+}

@@ -1,22 +1,24 @@
-import React from 'react';
+import React, {
+  PropTypes,
+} from 'react';
 
 let TouchableMixin = {
   propTypes: {
-    moveThreshold: React.PropTypes.number,
-    tapDelay: React.PropTypes.number,
-    pressDelay: React.PropTypes.number,
-    preventDefault: React.PropTypes.bool,
-    stopPropagation: React.PropTypes.bool,
+    moveThreshold: PropTypes.number,
+    tapDelay: PropTypes.number,
+    pressDelay: PropTypes.number,
+    preventDefault: PropTypes.bool,
+    stopPropagation: PropTypes.bool,
 
-    onSwipe: React.PropTypes.func,
-    onSwipeLeft: React.PropTypes.func,
-    onSwipeUp: React.PropTypes.func,
-    onSwipeRight: React.PropTypes.func,
-    onSwipeDown: React.PropTypes.func,
-    onTap: React.PropTypes.func,
-    onSingleTap: React.PropTypes.func,
-    onDoubleTap: React.PropTypes.func,
-    onPress: React.PropTypes.func,
+    onSwipe: PropTypes.func,
+    onSwipeLeft: PropTypes.func,
+    onSwipeUp: PropTypes.func,
+    onSwipeRight: PropTypes.func,
+    onSwipeDown: PropTypes.func,
+    onTap: PropTypes.func,
+    onSingleTap: PropTypes.func,
+    onDoubleTap: PropTypes.func,
+    onPress: PropTypes.func,
   },
 
   getDefaultProps() {
@@ -86,6 +88,7 @@ let TouchableMixin = {
   },
 
   handleTouchMove(e) {
+    // console.log('touch move');
     this.processEvent(e);
 
     let endTouch = e.touches[0];
@@ -93,7 +96,7 @@ let TouchableMixin = {
       touch,
       deltaX,
       deltaY,
-      } = this.state;
+    } = this.state;
 
     this._cancelPress();
 
@@ -113,6 +116,7 @@ let TouchableMixin = {
   },
 
   handleTouchEnd(e) {
+    // console.log('touch end..');
     this.processEvent(e);
 
     this._cancelPress();
@@ -120,14 +124,14 @@ let TouchableMixin = {
     let {
       tapDelay,
       moveThreshold,
-      } = this.props;
+    } = this.props;
     let {
       touch,
       startTouch,
       endTouch,
       deltaX,
       deltaY,
-      } = this.state;
+    } = this.state;
     let event = {
       touch,
       startTouch,
@@ -136,6 +140,7 @@ let TouchableMixin = {
       },
     };
 
+    // handle as swipe event
     if ((touch.x2 && Math.abs(touch.x1 - touch.x2) > moveThreshold) ||
       (touch.y2 && Math.abs(touch.y1 - touch.y2) > moveThreshold)) {
 
@@ -147,7 +152,7 @@ let TouchableMixin = {
         event.type += this._getSwipeDirection();
         this._handleEvent(event);
         this._resetTouch();
-      });
+      }, 0);
     }
     // normal tap
     else if ('last' in touch) {
@@ -238,7 +243,7 @@ let TouchableMixin = {
       x2,
       y1,
       y2,
-      } = this.state.touch;
+    } = this.state.touch;
 
     // 水平方向：水平距离大于等于垂直距离
     // 垂直方向：

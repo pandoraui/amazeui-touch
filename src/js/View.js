@@ -22,7 +22,7 @@ const View = React.createClass({
       component,
       className,
       ...props,
-      } = this.props;
+    } = this.props;
 
     return React.createElement(component, {
       ...props,

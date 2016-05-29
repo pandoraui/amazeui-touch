@@ -69,17 +69,25 @@
   display: inline-flex;
   align-items: center;
   cursor: pointer;
+  @include navbar-item-android-uc-fallback();
 
   & + & {
     margin-left: rem-calc(10);
   }
 }
 
+/*
 .#{$navbar-prefix}-nav-title {
   & ~ .#{$navbar-prefix}-icon {
     font-size: inherit;
     line-height: normal;
   }
+}
+*/
+
+.#{$navbar-prefix}-icon-sibling-of-title {
+  font-size: inherit;
+  line-height: normal;
 }
 
 
@@ -87,6 +95,7 @@
 .#{$navbar-class-left} {
   order: 1;
   flex: 0 0 $navbar-side-width;
+  @include flex-basis-fallback($navbar-side-width);
 
   .#{$navbar-prefix}-icon {
     order: -1;
@@ -97,12 +106,14 @@
   order: 2;
   flex: 0 0 $navbar-center-width;
   text-align: center;
+  @include flex-basis-fallback($navbar-center-width);
 }
 
 .#{$navbar-class-right} {
   order: 3;
   flex: 0 0 $navbar-side-width;
   text-align: right;
+  @include flex-basis-fallback($navbar-side-width);
 }
 
 // only left + right

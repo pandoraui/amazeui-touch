@@ -5,7 +5,7 @@ import {
   Route,
   Link,
   IndexRoute,
-  History,
+  hashHistory,
 } from 'react-router';
 
 import {
@@ -16,7 +16,9 @@ import ComponentDoc from './ComponentDoc';
 import Index from './Index';
 
 const Header = React.createClass({
-  mixins: [History],
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
 
   getInitialState() {
     return {
@@ -34,7 +36,7 @@ const Header = React.createClass({
     const pathName = `/${route}`;
 
     return (
-      <li className={this.history.isActive(pathName) ? 'am-active' : ''}>
+      <li className={this.context.router.isActive(pathName) ? 'am-active' : ''}>
         <Link to={pathName}>{title}</Link>
       </li>
     );
@@ -108,7 +110,7 @@ const GettingStarted = React.createClass({
 });
 
 const routes = (
-  <Router>
+  <Router history={hashHistory}>
     <Route path="/" component={App}>
       <Route path="docs" component={App.Components}>
         <Route path=":component" component={ComponentDoc} />

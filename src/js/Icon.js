@@ -30,7 +30,7 @@ const Icon = React.createClass({
       href,
       name,
       ...props
-      } = this.props;
+    } = this.props;
     Component = href ? 'a' : Component;
 
     // icon-[iconName]

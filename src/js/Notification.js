@@ -1,6 +1,10 @@
 import React from 'react';
-import classNames from 'classnames';
+import ReactDOM, {
+  unmountComponentAtNode,
+  unstable_renderSubtreeIntoContainer as renderSubtreeIntoContainer
+} from 'react-dom';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
+import classNames from 'classnames';
 import ClassNameMixin from './mixins/ClassNameMixin';
 import Icon from './Icon';
 
@@ -29,7 +33,8 @@ const Notification = React.createClass({
     return {
       classPrefix: 'notification',
       closeBtn: true,
-      onDismiss: () => {},
+      onDismiss: () => {
+      },
     };
   },
 
@@ -51,7 +56,7 @@ const Notification = React.createClass({
       animated,
       visible,
       ...props
-      } = this.props;
+    } = this.props;
 
     classSet[this.prefixClass('animated')] = animated;
 
@@ -86,4 +91,57 @@ const Notification = React.createClass({
   }
 });
 
-export default Notification;
+// const bodyElement = canUseDOM ? document.body : {appendChild: () => {}};
+const body = document.body;
+
+const NotificationPortal = React.createClass({
+  propTypes: {
+    visible: React.PropTypes.bool.isRequired,
+  },
+
+  getDefaultProps() {
+    return {
+      visible: false,
+    };
+  },
+
+  componentDidMount() {
+    if (!this.isStatic()) {
+      this.node = document.createElement('div');
+      this.node.className = '__notification-portal';
+      body.appendChild(this.node);
+      this.renderModal(this.props);
+    }
+  },
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.isStatic()) {
+      this.renderModal(nextProps);
+    }
+  },
+
+  componentWillUnmount() {
+    if (!this.isStatic()) {
+      unmountComponentAtNode(this.node);
+      body.removeChild(this.node);
+    }
+  },
+
+  isStatic() {
+    return this.props.static;
+  },
+
+  renderModal(props) {
+    this.portal = renderSubtreeIntoContainer(
+      this,
+      <Notification {...props} />,
+      this.node
+    );
+  },
+
+  render() {
+    return this.isStatic() ? <Notification {...this.props} /> : null;
+  }
+});
+
+export default NotificationPortal;

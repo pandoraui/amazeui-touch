@@ -99,7 +99,7 @@
     padding-bottom: .5em;
   }
 
-  :last-child {
+  > :last-child {
     margin-bottom: 0 !important;
   }
 

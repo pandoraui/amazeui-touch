@@ -1,15 +1,9 @@
 import React from 'react';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import Clipboard from 'clipboard';
-import {
-  History,
-  Link,
-} from 'react-router';
 import Prism from './Prism';
 
 const Highlight = React.createClass({
-  mixins: [History],
-
   propTypes: {
     language: React.PropTypes.string,
   },

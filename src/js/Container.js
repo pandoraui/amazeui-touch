@@ -1,4 +1,4 @@
-// @via https://github.com/JedWatson/react-container
+// @see https://github.com/JedWatson/react-container
 // @license MIT Copyright (c) 2015 Jed Watson
 
 import React from 'react';
@@ -112,7 +112,7 @@ let Container = React.createClass({
       scrollable,
       transition,
       ...props
-      } = this.props;
+    } = this.props;
     let classSet = this.getClassSet();
 
     // As view transition container

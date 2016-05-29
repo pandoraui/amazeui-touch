@@ -25,7 +25,7 @@ const Loader = React.createClass({
       className,
       component: Component,
       ...props,
-      } = this.props;
+    } = this.props;
 
     return (
       <Component

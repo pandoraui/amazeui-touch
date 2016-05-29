@@ -1,6 +1,5 @@
-// TODO: why `export Button from './Button'` not works?
 // @see http://jamesknelson.com/re-exporting-es6-modules/
-// @see https://github.com/Microsoft/TypeScript/issues/2726
+// @see http://exploringjs.com/es6/ch_modules.html#sec_all-exporting-styles
 
 export const VERSION = '__VERSION__';
 
@@ -21,7 +20,7 @@ export {default as Icon} from './Icon';
 export {default as Field} from './Field';
 export {default as List} from './List';
 export {default as Loader} from './Loader';
-export {default as Modal} from './Modal';
+export {default as Modal} from './modal';
 export {default as NavBar} from './NavBar';
 export {default as Notification} from './Notification';
 export {default as OffCanvas} from './OffCanvas';
@@ -37,3 +36,6 @@ export {default as View} from './View';
 
 // Mixins
 export * from './mixins';
+
+// Compatibility fallback
+import './utils/fallback';

@@ -28,7 +28,7 @@ const Badge = React.createClass({
       className,
       href,
       ...props
-      } = this.props;
+    } = this.props;
     Component = href ? 'a' : Component;
 
     return (

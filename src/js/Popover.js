@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import ClassNameMixin from './mixins/ClassNameMixin';
 import BackdropMixin from './mixins/BackdropMixin';
@@ -28,7 +27,7 @@ const Popover = React.createClass({
     if (e && e.target === this.refs.backdrop) {
       let {
         onDismiss,
-        } = this.props;
+      } = this.props;
 
       onDismiss && onDismiss();
     }
@@ -47,7 +46,7 @@ const Popover = React.createClass({
       isClosing,
       placement,
       ...props
-      } = this.props;
+    } = this.props;
     let style = {
       left: positionLeft,
       top: positionTop,
@@ -60,7 +59,7 @@ const Popover = React.createClass({
     classSet[this.prefixClass('out')] = isClosing;
     classSet[this.prefixClass(placement)] = placement;
 
-    let popover= (
+    let popover = (
       <div
         {...props}
         style={style}

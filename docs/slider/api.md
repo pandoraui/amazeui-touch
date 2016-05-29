@@ -46,7 +46,7 @@
 
 默认激活的幻灯片编号。
 
-##### `onSelect`
+##### `onAction`
 
 > PropType: `func`
 

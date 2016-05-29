@@ -8,6 +8,12 @@ import {
 } from 'amazeui-touch';
 
 const About = React.createClass({
+  getDefaultProps() {
+    return {
+      year: new Date().getFullYear(),
+    };
+  },
+  
   render() {
     return (
       <Container {...this.props}>
@@ -35,7 +41,12 @@ const About = React.createClass({
         <Group
           header="版权"
         >
-          <p>MIT © 2015 AllMobilize Inc.</p>
+          <p>MIT © 2015 - {this.props.year} AllMobilize Inc.</p>
+        </Group>
+        <Group
+          header="UA"
+        >
+          <p><code>{navigator.userAgent}</code></p>
         </Group>
       </Container>
     )

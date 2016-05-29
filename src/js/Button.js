@@ -32,7 +32,7 @@ const Button = React.createClass({
       component: Component,
       children,
       ...props
-      } = this.props;
+    } = this.props;
     Component = Component || 'a';
 
     href = href || '#';
@@ -54,7 +54,7 @@ const Button = React.createClass({
       component: Component,
       children,
       ...props,
-      } = this.props;
+    } = this.props;
     Component = Component || 'button';
 
     return (
@@ -74,7 +74,7 @@ const Button = React.createClass({
       target,
       block,
       className,
-      } = this.props;
+    } = this.props;
     let renderType = href || target ? 'renderAnchor' : 'renderButton';
 
     // block button

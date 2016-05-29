@@ -1,4 +1,4 @@
-let amStyles = [
+export let amStyles = [
   'Primary',
   'Secondary',
   'Success',
@@ -7,5 +7,4 @@ let amStyles = [
   'Dark'
 ];
 
-export {amStyles as amStyles};
 export * from '../src/js';

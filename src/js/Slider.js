@@ -27,7 +27,7 @@ const Slider = React.createClass({
     pauseOnHover: React.PropTypes.bool,
     // touch: React.PropTypes.bool,
 
-    onSelect: React.PropTypes.func,
+    onAction: React.PropTypes.func,
     onSlideEnd: React.PropTypes.func,
     activeIndex: React.PropTypes.number,
     defaultActiveIndex: React.PropTypes.number,
@@ -186,8 +186,8 @@ const Slider = React.createClass({
 
     direction = direction || this.getDirection(previousActiveIndex, index);
 
-    if (this.props.onSelect) {
-      this.props.onSelect(index, direction);
+    if (this.props.onAction) {
+      this.props.onAction(index, direction);
     }
 
     if (this.props.activeIndex == null && index !== previousActiveIndex) {
@@ -292,7 +292,7 @@ const Slider = React.createClass({
       className,
       children,
       ...props
-      } = this.props;
+    } = this.props;
 
     // TODO: 优化 swipe，左右方向阻止默认事件，垂直方向不阻止
     return (
@@ -305,6 +305,7 @@ const Slider = React.createClass({
         onSwipeLeft={this.handleSwipeLeft}
         onSwipeRight={this.handleSwipeRight}
         preventDefault={false}
+        stopPropagation={true}
       >
         <ul className={this.prefixClass('slides')}>
           {React.Children.map(children, this.renderItem)}
@@ -382,7 +383,7 @@ Slider.Item = React.createClass({
       animateIn,
       animateOut,
       direction,
-      } = this.props;
+    } = this.props;
     let classSet = {
       active: (active && !animateIn) || animateOut,
       next: active && animateIn && direction === 'next',

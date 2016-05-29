@@ -117,6 +117,11 @@ $z-index-popover: $z-index-base + 30 !default;
 // Components Variables
 // -----------------------------------------------------------------------------
 
+// Compatibility
+// - set NavBar & Col width for browsers which don't support flex-basis
+// -----------------------------------------------------------------------------
+$legacyFlexBoxSupport: true !default;
+
 // Base
 // -----------------------------------------------------------------------------
 $body-background: #f4f4f4 !default;
@@ -395,7 +400,7 @@ $slider-caption-color: $white !default;
 // Switch Variables
 // -----------------------------------------------------------------------------
 $switch-prefix: #{$namespace}switch !default;
-$switch-background: #ddd !default;
+$switch-background: #aaa !default;
 $switch-background-active: $global-primary !default;
 $switch-inner-background: $white !default;
 $switch-radius: 9999px !default;

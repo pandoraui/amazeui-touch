@@ -29,7 +29,7 @@ const Grid = React.createClass({
       avg,
       align,
       ...props
-      } = this.props;
+    } = this.props;
 
     // .g-collapse
     classSet[this.prefixClass('collapse')] = collapse;

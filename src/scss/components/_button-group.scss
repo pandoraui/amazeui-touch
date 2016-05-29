@@ -79,6 +79,7 @@
 
   > .#{$button-prefix},
   > .#{$button-group-prefix} {
+    @include fixes-flexbox-for-andriod;
     flex: 1;
   }
 }

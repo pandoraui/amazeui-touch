@@ -2,36 +2,41 @@
  * @see https://github.com/yuanyan/boron
  */
 
-import React from 'react';
+import React, {
+  PropTypes,
+  createClass,
+} from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
-import ClassNameMixin from './mixins/ClassNameMixin';
-import CSSCore from './utils/CSSCore';
-import Events from './utils/Events';
-import TransitionEvents from './utils/TransitionEvents';
-import Button from './Button';
-import Icon from './Icon';
-import Loader from './Loader';
+import ClassNameMixin from '../mixins/ClassNameMixin';
+import TransitionEvents from '../utils/TransitionEvents';
+import Button from '../Button';
+import Icon from '../Icon';
+import Loader from '../Loader';
 
 // MUST be equal to $modal-duration in _modal.scss
 const TRANSITION_TIMEOUT = 300;
 
-const Modal = React.createClass({
+function noop() {
+}
+
+const Modal = createClass({
   mixins: [ClassNameMixin],
 
   propTypes: {
-    classPrefix: React.PropTypes.string,
-    role: React.PropTypes.oneOf(['alert', 'confirm', 'prompt', 'loading',
+    classPrefix: PropTypes.string,
+    role: PropTypes.oneOf(['alert', 'confirm', 'prompt', 'loading',
       'actions', 'popup']),
-    title: React.PropTypes.node,
-    confirmText: React.PropTypes.string,
-    cancelText: React.PropTypes.string,
-    closeBtn: React.PropTypes.bool,
-    closeViaBackdrop: React.PropTypes.bool,
-    onSelect: React.PropTypes.func,
-    onOpen: React.PropTypes.func,
-    onClosed: React.PropTypes.func,
+    title: PropTypes.node,
+    confirmText: PropTypes.string,
+    cancelText: PropTypes.string,
+    closeBtn: PropTypes.bool,
+    closeViaBackdrop: PropTypes.bool,
+    onAction: PropTypes.func,
+    onOpen: PropTypes.func,
+    onClosed: PropTypes.func,
+    onDismiss: PropTypes.func,
   },
 
   getDefaultProps() {
@@ -40,12 +45,10 @@ const Modal = React.createClass({
       confirmText: '确定',
       cancelText: '取消',
       closeBtn: true,
-      onSelect: () => {
-      },
-      onOpen: () => {
-      },
-      onClosed: () => {
-      },
+      onAction: noop,
+      onOpen: noop,
+      onClosed: noop,
+      onDismiss: noop,
     };
   },
 
@@ -56,16 +59,24 @@ const Modal = React.createClass({
     };
   },
 
-  isClosed() {
-    return this.state.closed;
+  componentDidMount() {
+    if (this.props.isOpen) {
+      this.open();
+    }
   },
 
-  handleBackdropClick(e) {
-    if (e.target !== e.currentTarget || !this.props.closeViaBackdrop) {
-      return;
-    }
+  componentWillReceiveProps(nextProps) {
+    let isOpen = this.props.isOpen;
 
-    this.close();
+    if (!isOpen && nextProps.isOpen) {
+      this.open();
+    } else if (isOpen && !nextProps.isOpen) {
+      this.close();
+    }
+  },
+
+  isClosed() {
+    return this.state.closed;
   },
 
   isPopup() {
@@ -91,13 +102,33 @@ const Modal = React.createClass({
     return (data.length === 0) ? null : ((data.length === 1) ? data[0] : data);
   },
 
-  handleSelect(data, e) {
-    if (this.props.role === 'prompt' && data) {
+  // data === null: prompt -> canceled
+  // data === true: confirm -> confirmed
+  // data === false: confirm -> canceled
+  handleAction(data, e) {
+    let {
+      role,
+      onAction,
+    } = this.props;
+    let willClose = true;
+
+    if (role === 'prompt' && data) {
       data = this.getFieldData();
+
+      willClose = onAction.call(this, data, e);
+    } else {
+      onAction.call(this, data, e);
     }
 
-    this.close();
-    this.props.onSelect.call(this, data, e);
+    willClose && this.requestClose(e);
+  },
+
+  handleBackdropClick(e) {
+    if (e.target !== e.currentTarget || !this.props.closeViaBackdrop) {
+      return;
+    }
+
+    this.requestClose(e);
   },
 
   open() {
@@ -111,6 +142,7 @@ const Modal = React.createClass({
     }
   },
 
+  // Only for instance self calling
   close() {
     if (this.isClosed() || this.state.isClosing) {
       return;
@@ -119,6 +151,11 @@ const Modal = React.createClass({
     this.setState({
       isClosing: true
     });
+  },
+
+  // for user actions
+  requestClose(e) {
+    this.props.onDismiss(e);
   },
 
   handleClosed() {
@@ -141,7 +178,7 @@ const Modal = React.createClass({
         {this.props.children}
         <div className={this.prefixClass('actions-group')}>
           <Button
-            onClick={this.close}
+            onClick={this.requestClose}
             block
             amStyle={this.props.btnStyle || 'secondary'}
           >
@@ -160,7 +197,7 @@ const Modal = React.createClass({
       title,
       children,
       ...props
-      } = this.props;
+    } = this.props;
 
     return (
       <div
@@ -179,7 +216,7 @@ const Modal = React.createClass({
             <Icon
               name="close"
               className={this.setClassNS('popup-icon')}
-              onClick={this.close}
+              onClick={this.requestClose}
             />
           </div>
           <div className={this.setClassNS('popup-body')}>
@@ -195,12 +232,12 @@ const Modal = React.createClass({
       title,
       closeBtn,
       role
-      } = this.props;
+    } = this.props;
     let closeIcon = closeBtn && !role ? (
       <Icon
         name="close"
         className={this.prefixClass('icon')}
-        onClick={this.close}
+        onClick={this.requestClose}
       />
     ) : null;
 
@@ -227,14 +264,14 @@ const Modal = React.createClass({
       role,
       confirmText,
       cancelText,
-      } = this.props;
+    } = this.props;
 
     switch (role) {
       case 'alert':
         buttons = (
           <span
             key="modalBtn"
-            onClick={this.handleSelect.bind(this, null)}
+            onClick={this.handleAction.bind(this, null)}
             className={btnClass}
           >
             {confirmText}
@@ -247,7 +284,7 @@ const Modal = React.createClass({
           return (
             <span
               key={'modalBtn' + i}
-              onClick={this.handleSelect.bind(this, i === 0 ? cancel : true)}
+              onClick={this.handleAction.bind(this, i === 0 ? cancel : true)}
               className={btnClass}
             >
               {text}
@@ -313,7 +350,7 @@ const Modal = React.createClass({
     let {
       closed,
       isClosing,
-      } = this.state;
+    } = this.state;
 
     if (closed) {
       return null;
@@ -346,7 +383,7 @@ const Modal = React.createClass({
       modalWidth,
       modalHeight,
       ...props
-      } = this.props;
+    } = this.props;
     let modal;
 
     classSet[this.prefixClass('out')] = isClosing;

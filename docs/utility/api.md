@@ -22,6 +22,33 @@
 - `.fr`: 向右浮动
 - `.fn`: 不浮动
 
+### 边距
+
+类名命名规则：
+
+```css
+.{type}[-(v|h|top|right|bottom|left)][-0|xs|sm|lg|xl]
+```
+
+- **`type`**：`margin` 或者 `padding`
+- **`[-(v|h|top|right|bottom|left)]`**：可选的方式
+  - 不加则为上右下左皆有，即 `padding: value;`/`margin: value;`
+  - `v` 为垂直方向， `h` 为垂直方向
+- **`[-0|xs|sm|lg|xl]`**：值修饰符
+  - 不添加为 `0.9375rem` (`15px`)
+  - `0`: 0
+  - `xs`: 0.3125rem
+  - `sm`: 0.625rem
+  - `lg`: 1.25rem
+  - `xl`: 2rem
+
+**示例：**
+
+- `margin`: 外边距为 `0.9375rem`
+- `margin-v`: 垂直（上下）外边距为 `0.9375rem`
+- `margin-v-xs`: 垂直外边距为 `0.3125rem`
+- `padding-left-0`: 左内边距为 `0`
+
 
 ## 文本
 
@@ -35,3 +62,11 @@
 - `.text-center`: 居中
 - `.text-right`: 右对齐
 - `.text-justify`: 两端对齐
+
+### 文本颜色
+
+- `.text-primary`
+- `.text-secondary`
+- `.text-success`
+- `.text-warning`
+- `.text-alert`

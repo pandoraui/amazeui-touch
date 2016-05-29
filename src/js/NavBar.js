@@ -12,13 +12,14 @@ const NavBar = React.createClass({
     leftNav: React.PropTypes.array,
     rightNav: React.PropTypes.array,
     titleOnLeft: React.PropTypes.bool,
-    onSelect: React.PropTypes.func,
+    onAction: React.PropTypes.func,
   },
 
   getDefaultProps() {
     return {
       classPrefix: 'navbar',
-      onSelect: () => {},
+      onAction: () => {
+      },
     };
   },
 
@@ -26,7 +27,7 @@ const NavBar = React.createClass({
     let {
       titleOnLeft,
       title,
-      } = this.props;
+    } = this.props;
     let titlePosition = this.prefixClass(titleOnLeft ? 'left' : 'center');
 
     return title ? (
@@ -40,6 +41,7 @@ const NavBar = React.createClass({
 
   renderNav(position) {
     let nav = this.props[position + 'Nav'];
+    this._navPosition = position;
 
     return nav && Array.isArray(nav) ? (
       <div
@@ -52,41 +54,84 @@ const NavBar = React.createClass({
   },
 
   renderNavItem(item, index) {
-    let Component = item.component || 'a';
-    let itemProps = item.props || {};
-    let navTitle = item.title ? (
+    let {
+      component: Component,
+      title,
+      customIcon,
+      icon,
+      isClone,
+      // href,
+      className,
+      ...otherProps,
+    } = item;
+    let children = [];
+    let itemClassName = classNames(this.prefixClass('nav-item'), className);
+    let itemProps = {
+      key: 'navbarNavItem' + index,
+      onClick: this.props.onAction.bind(this, item),
+      ...otherProps,
+      className: itemClassName,
+    };
+
+    Component = Component || 'a';
+
+    title && children.push(
       <span
         className={this.prefixClass('nav-title')}
         key='title'
       >
-        {item.title}
+        {title}
       </span>
-    ) : null;
-    let navIconKey = 'icon';
-    let navIcon = item.customIcon ? (
+    );
+
+    const navIconKey = 'icon';
+    const iconClassName = {
+      [this.prefixClass('icon')]: true,
+      // affected by order and icon order changing
+      // .navbar-nav-title ~ .navbar-icon not works
+      // add an className to set styles
+      [this.prefixClass('icon-sibling-of-title')]: !!title,
+    };
+    let navIcon = customIcon ? (
       <img
-        src={item.customIcon}
-        className={this.prefixClass('icon')}
-        alt={item.title || null}
+        src={customIcon}
+        className={classNames(iconClassName)}
+        alt={title || null}
         key={navIconKey}
       />
-    ) : item.icon ? (
+    ) : icon ? (
       <Icon
-        className={this.prefixClass('icon')}
-        name={item.icon}
+        className={classNames(iconClassName)}
+        name={icon}
         key={navIconKey}
       />
     ) : null;
 
+    // adjust title and icon order for Android UC
+    // @see ../scss/helper/_mixins.scss `navbar-item-android-uc-fallback` mixin
+    if (navIcon) {
+      const action = this._navPosition === 'left' ? 'unshift' : 'push';
+      Array.prototype[action].call(children, navIcon);
+    }
+    // navIcon && children.push(navIcon);
+    
+    let renderChildren = () => {
+      // #40
+      // if `Component` is a clone type like OffCanvasTrigger,
+      // this should return a element with the className.
+      // TBC: should other props be transferred to the span element?
+      return isClone ? (
+        <span
+          className={itemClassName}
+        >
+          {children}
+        </span>
+      ) : children;
+    };
+
     return (
-      <Component
-        href={item.href}
-        key={'navbarNavItem' + index}
-        onClick={this.props.onSelect.bind(this, item)}
-        {...itemProps}
-        className={classNames(this.prefixClass('nav-item'), itemProps.className)}
-      >
-        {[navTitle, navIcon]}
+      <Component {...itemProps}>
+        {renderChildren()}
       </Component>
     );
   },
@@ -97,7 +142,7 @@ const NavBar = React.createClass({
       title,
       className,
       ...props
-      } = this.props;
+    } = this.props;
 
     return (
       <header

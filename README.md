@@ -33,53 +33,56 @@ Amaze UI Touch 专为移动打造，在技术实现、交互设计上只考虑�
 
 1. 从 npm 安装：
 
-   ``` bash
-   npm install --save-dev amazeui-touch
-   ```
+    ``` bash
+    npm install --save-dev amazeui-touch
+    ```
 
 2. 使用 组件：
 
-   ``` javascript
-   import React from 'react';
-   import ReactDOM from 'react-dom';
-   import {
-     Button,
-   } from 'amazeui-touch';
+    ``` javascript
+    class App extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          said: false,
+        };
 
-   const App = React.createClass({
-     getInitialState() {
-       return {
-         said: false,
-       };
-     },
+        this.handleClick = this.handleClick.bind(this);
+      }
 
-     handleClick() {
-       this.setState({
-         said: true,
-       });
-     },
+      handleClick() {
+        this.setState({
+          said: true,
+        });
+      }
 
-     renderHello() {
-       return this.state.said ? (
-         <p>Hello World! Welcome to Amaze UI Touch.</p>
-       ) : null;
-     },
+      renderHello() {
+        return this.state.said ? (
+          <p>Hello World! Welcome to Amaze UI Touch.</p>
+        ) : null;
+      }
 
-     render() {
-       const said = this.state.said;
-       const text = said ? 'Said :(' : 'Say hello :)';
+      render() {
+        const said = this.state.said;
+        const text = said ? 'Said :(' : 'Say hello :)';
 
-       return (
-         <div>
-           <Button disabled={said}>{text}</Button>
-           {this.renderHello()}
-         </div>
-       );
-     }
-   });
+        return (
+          <div>
+            <Button
+              amStyle="primary"
+              disabled={said}
+              onClick={this.handleClick}
+            >
+              {text}
+            </Button>
+            {this.renderHello()}
+          </div>
+        );
+      }
+    }
 
-   ReactDOM.render(<App />, document.getElementById('root'));
-   ```
+    ReactDOM.render(<App />, document.getElementById('root'));
+    ```
 
 ES2015/JSX 编译参见 [Amaze UI Touch Starter Kit](https://github.com/amazeui/amt-starter-kit)。
 
@@ -97,7 +100,7 @@ ES2015/JSX 编译参见 [Amaze UI Touch Starter Kit](https://github.com/amazeui/
 1. 克隆源代码并安装依赖：
 
    ``` bash
-   git clone https://github.com/allmobilize/amazeui-touch.git
+   git clone https://github.com/amazeui/amazeui-touch.git
    ```
 
    在源码目录下执行：
@@ -122,4 +125,4 @@ ES2015/JSX 编译参见 [Amaze UI Touch Starter Kit](https://github.com/amazeui/
 
 ## License
 
-MIT © 2015 AllMobilize Inc.
+MIT © 2015 - 2016 AllMobilize Inc.

@@ -30,7 +30,7 @@
 - `'alert'`
 - `'dark'`
 
-##### `onSelect`
+##### `onAction`
 
 > PropType: `func`
 

@@ -18,8 +18,6 @@ body {
 }
 
 .container-fill > .container-fill {
-  -webkit-flex: 1 1 0;
-  -ms-flex: 1 1 0;
   flex: 1 1 0;
   position: relative;
 }
@@ -34,8 +32,6 @@ body {
 
 .container-column,
 .container-row {
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
   max-height: 100%;
   width: 100%;
@@ -43,21 +39,15 @@ body {
 
 .container-column > .container-fill,
 .container-row > .container-fill {
-  -webkit-flex: 1 1 0;
-  -ms-flex: 1 1 0;
   flex: 1 1 0;
   position: relative;
 }
 
 .container-column {
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column;
 }
 
 .container-row {
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
   flex-direction: row;
   height: auto;
 }

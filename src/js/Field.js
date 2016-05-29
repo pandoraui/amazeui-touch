@@ -98,7 +98,7 @@ const Field = React.createClass({
         let {
           classPrefix,
           ...others
-          } = this.props;
+        } = this.props;
         field = (
           <Button
             {...props}
@@ -125,7 +125,8 @@ const Field = React.createClass({
       <label
         htmlFor={this.props.id}
         className={this.prefixClass('container')}
-        key="label">
+        key="label"
+      >
         <span className={this.prefixClass('label')}>
           {this.props.label}
         </span>
@@ -149,7 +150,7 @@ const Field = React.createClass({
       btnBefore,
       btnAfter,
       ...props
-      } = this.props;
+    } = this.props;
     let renderFiledLabel = (type) => {
       return this.props[type] ? (
         <span

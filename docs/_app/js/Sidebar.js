@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Link,
-  History,
 } from 'react-router';
 import {
   Container,
@@ -117,8 +116,6 @@ const components = [
 ];
 
 const Sidebar = React.createClass({
-  mixins: [History],
-
   getInitialState() {
     return {
       filter: null

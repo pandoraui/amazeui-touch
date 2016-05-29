@@ -40,6 +40,11 @@ const Doc = React.createClass({
           className="doc-content"
         >
           {this.props.children}
+          <p
+            className="am-text-right doc-version am-text-sm"
+          >
+            Version: __VERSION__
+          </p>
         </div>
       </div>
     );

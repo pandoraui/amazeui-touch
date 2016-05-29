@@ -2,7 +2,9 @@
  * @see https://github.com/negomi/react-burger-menu
  */
 
-import React from 'react';
+import React, {
+  PropTypes,
+} from 'react';
 import classNames from 'classnames';
 import ClassNameMixin from './mixins/ClassNameMixin';
 import BackdropMixin from './mixins/BackdropMixin';
@@ -11,9 +13,9 @@ const OffCanvas = React.createClass({
   mixins: [ClassNameMixin, BackdropMixin],
 
   propTypes: {
-    classPrefix: React.PropTypes.string,
-    placement: React.PropTypes.oneOf(['left', 'right']),
-    onDismiss: React.PropTypes.func,
+    classPrefix: PropTypes.string,
+    placement: PropTypes.oneOf(['left', 'right']),
+    onDismiss: PropTypes.func,
   },
 
   getDefaultProps() {
@@ -27,7 +29,7 @@ const OffCanvas = React.createClass({
     if (e && e.target === this.refs.backdrop) {
       let {
         onDismiss,
-        } = this.props;
+      } = this.props;
 
       onDismiss && onDismiss();
     }
@@ -42,7 +44,7 @@ const OffCanvas = React.createClass({
       children,
       isClosing,
       ...props
-      } = this.props;
+    } = this.props;
 
     classSet[this.prefixClass('out')] = isClosing;
     classSet[this.prefixClass(placement)] = !!placement;
